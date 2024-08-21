@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Editar fabricante";
+}
+
+
+<div class="text-center">
+
+    <h1 class="display-4">Editar fabricante</h1>
+
+</div>
+
+<form>
+    <div class="form-group">
+        <label for="nomeFabricante" class="form-label">Fabricante</label>
+        <input type="text" id="nomeFabricante" class="form-control" placeholder="Informe o nome do fabricante">
+    </div>
+    <div class="form-group">
+        <label for="paisOrigem" class="form-label">País de origem</label>
+        <input type="text" id="paisOrigem" class="form-control" placeholder="Informe o país de origem">
+    </div>
+    <div class="form-group">
+        <label for="anoFundacao" class="form-label">Ano de fundação</label>
+        <input type="number" id="anoFundacao" class="form-control" placeholder="Selecione o ano de fundação" min="1500" max="">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Editar</button>
+    <a class="btn btn-secondary" asp-controller="Fabricantes" asp-action="Index" role="button">Voltar</a>
+</form>
+
