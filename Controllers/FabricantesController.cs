@@ -23,21 +23,82 @@ namespace Intelectah.Controllers
             return View();
         }
 
-        public IActionResult Editar()
+        public IActionResult Editar(int Id)
         {
-            return View();
+            FabricantesModel fabricante = _fabricantesRepositorio.ListarPorId(Id);
+            return View(fabricante);
         }
 
-        public IActionResult ApagarConfirmacao()
+        public IActionResult ApagarConfirmacao(int Id)
         {
-            return View();
+            FabricantesModel fabricante = _fabricantesRepositorio.ListarPorId(Id);
+            return View(fabricante);
+        }
+
+        public IActionResult Apagar(int Id)
+        {
+            try
+            {
+                bool apagado = _fabricantesRepositorio.Apagar(Id);
+                if (apagado)
+                {
+                    TempData["MensagemSucesso"] = "Fabricante deletado com sucesso";
+
+                }
+                else
+                {
+                    TempData["MensagemErro"] = "Não foi possivel deletar o fabricante";
+
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception erro)
+            {
+                TempData["MensagemErro"] = $"Não foi possivel deletar o fabricante, tente novamente, detalhe do erro:{erro.Message}";
+                return View("Index");
+            }
         }
 
         [HttpPost]
         public IActionResult Criar(FabricantesModel fabricante)
         {
-            _fabricantesRepositorio.Adicionar(fabricante);
-            return RedirectToAction("Index");
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _fabricantesRepositorio.Adicionar(fabricante);
+                    TempData["MensagemSucesso"] = "Fabricante cadastrado com sucesso";
+                    return RedirectToAction("Index");
+                }
+
+                return View(fabricante);
+            }
+            catch (Exception erro)
+            {
+                TempData["MensagemErro"] = $"Não foi possivel cadastrar o fabricante, tente novamente, detalhe do erro:{erro.Message}";
+                return RedirectToAction("Index");
+            }
+
+        }
+
+        [HttpPost]
+        public IActionResult Alterar(FabricantesModel fabricante)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _fabricantesRepositorio.Atualizar(fabricante);
+                    TempData["MensagemSucesso"] = "Fabricante alterado com sucesso";
+                    return RedirectToAction("Index");
+                }
+                return RedirectToAction("Editar", fabricante);
+            }
+            catch (Exception erro)
+            {
+                TempData["MensagemErro"] = $"Não foi possivel alterar o fabricante, tente novamente, detalhe do erro:{erro.Message}";
+                return RedirectToAction("Index");
+            }
         }
 
     }

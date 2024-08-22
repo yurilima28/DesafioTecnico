@@ -4,27 +4,20 @@
     ViewData["Title"] = "Adicionar fabricante";
 }
 
+
 <div class="text-center">
-
     <h1 class="display-4">Adicionar fabricante</h1>
-
 </div>
-
 <form asp-controller="Fabricantes" asp-action="Criar" method="post">
-    <div class="form-group">
-        <label for="nomeFabricante" class="form-label">Fabricante</label>
-        <input type="text" asp-for="NomeFabricante" id="nomeFabricante" class="form-control" placeholder="Informe o nome do fabricante">
-    </div>
-    <div class="form-group">
-        <label for="paisOrigem" class="form-label">País de origem</label>
-        <input type="text" asp-for="PaisOrigem" id="paisOrigem" class="form-control" placeholder="Informe o país de origem">
-    </div>
-    <div class="form-group">
-        <label for="anoFundacao" class="form-label">Ano de fundação</label>
-        <input type="number" asp-for="AnoFundacao" id="anoFundacao" class="form-control" placeholder="Selecione o ano de fundação" min="1500" max="">
-    </div>
+
+    @Html.Partial("Forms.cshtml")
 
     <button type="submit" class="btn btn-primary">Adicionar</button>
-    <a class="btn btn-secondary" asp-controller="Fornecedores" asp-action="Index" role="button">Voltar</a>
+    <a class="btn btn-secondary" asp-action="Index" asp-controller="Fabricantes" role="button">Voltar</a>
+
 </form>
+
+
+
+
 

@@ -1,0 +1,19 @@
+﻿@model FabricantesModel
+
+<div class="row">
+    <div class="form-group">
+        <label asp-for="NomeFabricante">Nome do fabricante</label>
+        <input asp-for="NomeFabricante" class="form-control" placeholder="Informe o nome do fabricante" />
+        @Html.ValidationMessageFor(x => x.NomeFabricante)
+    </div>
+    <div class="form-group">
+        <label asp-for="PaisOrigem">País de origem</label>
+        <input asp-for="PaisOrigem" class="form-control" placeholder="Informe o país de origem" />
+        @Html.ValidationMessageFor(x => x.PaisOrigem)
+    </div>
+    <div class="form-group">
+        <label asp-for="AnoFundacao">Ano de fundação</label>
+        <input asp-for="AnoFundacao" class="form-control" placeholder="Informe o ano de fundação da fabricante" />
+        @Html.ValidationMessageFor(x => x.AnoFundacao)
+    </div>
+</div>
