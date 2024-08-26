@@ -18,6 +18,7 @@ namespace Intelectah.Repositorio
         {
             return _bancoContext.Fabricantes.ToList();
         }
+     
         public FabricantesModel Adicionar(FabricantesModel fabricante)
         {
             _bancoContext.Fabricantes.Add(fabricante);
@@ -34,6 +35,7 @@ namespace Intelectah.Repositorio
                 fabricanteDB.NomeFabricante = fabricante.NomeFabricante;
                 fabricanteDB.PaisOrigem = fabricante.PaisOrigem;
                 fabricanteDB.AnoFundacao = fabricante.AnoFundacao;
+                fabricanteDB.URL = fabricante.URL;
 
                 _bancoContext.Fabricantes.Update(fabricanteDB);
                 _bancoContext.SaveChanges();
@@ -50,6 +52,12 @@ namespace Intelectah.Repositorio
             _bancoContext.Fabricantes.Remove(fabricanteDB);
             _bancoContext.SaveChanges();
             return true;
+        }
+
+        public FabricantesModel ObterPorNome(string nomeFabricante)
+        {
+            return _bancoContext.Fabricantes
+        .FirstOrDefault(f => f.NomeFabricante.ToLower() == nomeFabricante.ToLower());
         }
     }
 }

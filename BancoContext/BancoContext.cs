@@ -9,6 +9,9 @@ namespace Intelectah.Dapper
         {
         }
         public DbSet<FabricantesModel> Fabricantes { get; set; }
+        public DbSet<VeiculosModel> Veiculos { get; set; }
+
+      
     }
 }
  

@@ -1,0 +1,23 @@
+﻿@model VeiculosModel
+
+@{
+    ViewData["Title"] = "Editar veículo";
+}
+
+
+<div class="text-center">
+
+    <h1 class="display-4">Editar fabricante</h1>
+
+</div>
+
+<form asp-controller="Veiculos" asp-action="Alterar" method="post">
+    <input type="hidden" asp-for="VeiculoID" />
+    @Html.Partial("Forms.cshtml")
+
+    <button type="submit" class="btn btn-primary">Editar</button>
+    <a class="btn btn-secondary" asp-controller="Veiculos" asp-action="Index" role="button">Voltar</a>
+
+</form>
+
+

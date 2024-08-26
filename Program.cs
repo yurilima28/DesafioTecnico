@@ -11,6 +11,8 @@ builder.Services.AddDbContext<BancoContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase"));
 });
 builder.Services.AddScoped<IFabricantesRepositorio, FabricantesRepositorio>();
+builder.Services.AddScoped<IVeiculosRepositorio, VeiculosRepositorio>();
+
 
 var app = builder.Build();
 

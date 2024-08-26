@@ -4,7 +4,7 @@
 
 namespace Intelectah.Migrations
 {
-    public partial class CriandoTabelaFabricantes : Migration
+    public partial class AdicionaTabelaFabricantes : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,8 @@ namespace Intelectah.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NomeFabricante = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PaisOrigem = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    AnoFundacao = table.Column<int>(type: "int", nullable: false)
+                    AnoFundacao = table.Column<int>(type: "int", nullable: false),
+                    URL = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
                 },
                 constraints: table =>
                 {

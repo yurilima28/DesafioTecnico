@@ -40,6 +40,7 @@
                     <th scope="col">Nome do fabricante</th>
                     <th scope="col">País de origem</th>
                     <th scope="col">Ano de fundação</th>
+                    <th scope="col">URL</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -53,6 +54,7 @@
                             <td>@fabricante.NomeFabricante</td>
                             <td>@fabricante.PaisOrigem</td>
                             <td>@fabricante.AnoFundacao</td>
+                            <td>@fabricante.URL</td>
                             <td>
                                 <div class="btn-group" role="group">
                                     <a role="button" class="btn btn-primary" asp-route-id="@fabricante.FabricanteID" asp-controller="Fabricantes" asp-action="Editar">Editar</a>

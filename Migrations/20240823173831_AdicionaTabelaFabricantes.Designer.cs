@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Intelectah.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    [Migration("20240821123802_CriandoTabelaFabricantes")]
-    partial class CriandoTabelaFabricantes
+    [Migration("20240823173831_AdicionaTabelaFabricantes")]
+    partial class AdicionaTabelaFabricantes
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -43,6 +43,11 @@ namespace Intelectah.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("FabricanteID");
 
