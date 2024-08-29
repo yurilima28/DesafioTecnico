@@ -1,5 +1,6 @@
 ﻿using Intelectah.Dapper;
 using Intelectah.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Intelectah.Repositorio
 {
@@ -17,7 +18,7 @@ namespace Intelectah.Repositorio
         }
         public List<VeiculosModel> BuscarTodos()
         {
-            return _bancoContext.Veiculos.ToList();
+             return _bancoContext.Veiculos.ToList();
         }
         public VeiculosModel Adicionar(VeiculosModel veiculo)
         {

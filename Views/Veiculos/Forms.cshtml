@@ -5,39 +5,40 @@
 <div class="row">
     <div class="form-group col-md-6">
         <label asp-for="ModeloVeiculo">Modelo</label>
-        <input asp-for="ModeloVeiculo" class="form-control" placeholder="Informe o modelo do veículos" />
-        @Html.ValidationMessageFor(x => x.ModeloVeiculo)
+        <input asp-for="ModeloVeiculo" class="form-control" />
+        <span asp-validation-for="ModeloVeiculo" class="text-danger"></span>
     </div>
     <div class="form-group col-md-6">
         <label asp-for="AnoFabricacao">Ano de fabricação</label>
-        <input asp-for="AnoFabricacao" class="form-control" placeholder="Informe o ano de fabricação" />
-        @Html.ValidationMessageFor(x => x.AnoFabricacao)
+        <input asp-for="AnoFabricacao" class="form-control" />
+        <span asp-validation-for="AnoFabricacao" class="text-danger"></span>
     </div>
     <div class="form-group col-md-6">
-        <label asp-for="Tipo">Tipo de Veículo</label>
-        <select asp-for="Tipo" class="form-control" asp-items="@(new SelectList(ViewBag.TipoVeiculoOptions, "Value", "Text"))">
-            <option value="">Selecione o tipo de veículo</option>
+        <label asp-for="ValorVeiculo">Valor do veículo R$</label>
+        <input asp-for="ValorVeiculo" class="form-control" />
+        <span asp-validation-for="ValorVeiculo" class="text-danger"></span>
+    </div>
+    <div class="form-group col-md-6">
+        <label asp-for="Tipo">Tipo de veículo</label>
+        <select asp-for="Tipo" class="form-control">
+            @foreach (var tipo in Enum.GetValues(typeof(Intelectah.Enums.TipoVeiculo)))
+            {
+                <option value="@tipo">@tipo</option>
+            }
         </select>
-        @Html.ValidationMessageFor(x => x.Tipo)
-    </div>
-</div>
-<div class="row">
-    <div class="form-group col-md-6">
-        <label asp-for="ValorVeiculo">Valor do veículo</label>
-        <input asp-for="ValorVeiculo" class="form-control" placeholder="Informe o valor do veículo" />
-        @Html.ValidationMessageFor(x => x.ValorVeiculo)
+        <span asp-validation-for="Tipo" class="text-danger"></span>
     </div>
     <div class="form-group col-md-6">
         <label asp-for="FabricanteID">Fabricante</label>
-        <select asp-for="FabricanteID" class="form-control" asp-items="@(new SelectList(ViewBag.Fabricantes, "Value", "Text"))">
-            <option value="">Selecione o fabricante</option>
+        <select asp-for="FabricanteID" class="form-control" asp-items="ViewBag.Fabricantes">
+            <option value="">Selecione um Fabricante</option>
         </select>
-        @Html.ValidationMessageFor(x => x.FabricanteID)
+        <span asp-validation-for="FabricanteID" class="text-danger"></span>
     </div>
-    <div class="form-group col-md-12">
-        <label asp-for="Descricao">Descrição</label>
-        <textarea asp-for="Descricao" class="form-control" placeholder="Informe a descrição"></textarea>
-        @Html.ValidationMessageFor(x => x.Descricao)
+    <div class="form-group">
+        <label asp-for="Descricao">Descrição do veículo</label>
+        <textarea asp-for="Descricao" class="form-control"></textarea>
+        <span asp-validation-for="Descricao" class="text-danger"></span>
     </div>
 
 </div>

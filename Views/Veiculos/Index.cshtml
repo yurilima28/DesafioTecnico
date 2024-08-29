@@ -1,4 +1,5 @@
-﻿@model List<VeiculosModel>
+﻿@model List<VeiculosModel> 
+
 @{
     ViewData["Title"] = "Veiculos";
 }
@@ -42,6 +43,8 @@
                     <th scope="col">Fabricante</th>
                     <th scope="col">Tipo de veículo</th>
                     <th scope="col">Descrição</th>
+                    <th scope="col"></th>
+               
                 </tr>
             </thead>
             <tbody>
@@ -49,13 +52,14 @@
                 {
                     foreach (VeiculosModel veiculo in Model)
                     {
-                        <tr>
+                        <tr> 
+                            <td></td>
                             <td>@veiculo.ModeloVeiculo</td>
                             <td>@veiculo.AnoFabricacao</td>
-                            <td>@veiculo.ValorVeiculo</td>lorVeiculo 
-                            <td>@veiculo.FabricanteID</td>
+                            <td>@veiculo.ValorVeiculo</td> 
+                            <td>@veiculo.Fabricante?.NomeFabricante</td>
                             <td>@veiculo.Tipo</td>
-                            <td>@veiculo.Descricao</td>
+                            <td>@veiculo.Descricao</td>                          
                             <td>
                                 <div class="btn-group" role="group">
                                     <a role="button" class="btn btn-primary" asp-route-id="@veiculo.VeiculoID" asp-controller="Veiculos" asp-action="Editar">Editar</a>

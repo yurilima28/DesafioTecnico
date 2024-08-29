@@ -2,6 +2,7 @@
 using Intelectah.Models;
 using Intelectah.Repositorio;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Intelectah.Controllers
 {
@@ -17,18 +18,21 @@ namespace Intelectah.Controllers
         }
         public IActionResult Index()
         {
-            var Veiculos = _veiculosRepositorio.BuscarTodos();
-            return View(Veiculos);
+            var veiculos = _veiculosRepositorio.BuscarTodos();
+            var fabricantes = _fabricantesRepositorio.BuscarTodos();
+            return View(veiculos);
         }
         public IActionResult Criar()
         {
-            ViewBag.Fabricantes = _fabricantesRepositorio.BuscarTodos();
+            var fabricantes = _fabricantesRepositorio.BuscarTodos();
+            ViewBag.Fabricantes = new SelectList(fabricantes, "FabricanteID", "NomeFabricante");
             return View(new VeiculosModel());
         }
         public IActionResult Editar(int Id)
         {
             VeiculosModel veiculo = _veiculosRepositorio.ListarPorId(Id);
-            ViewBag.Fabricantes = _fabricantesRepositorio.BuscarTodos();
+            var fabricantes = _fabricantesRepositorio.BuscarTodos() ?? new List<FabricantesModel>();
+            ViewBag.Fabricantes = new SelectList(fabricantes, "FabricanteID", "NomeFabricante");
             return View(veiculo);
         }
         public IActionResult ApagarConfirmacao(int Id)
@@ -62,6 +66,7 @@ namespace Intelectah.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    var 
                     _veiculosRepositorio.Adicionar(veiculo);
                     TempData["MensagemSucesso"] = "Veículo cadastrado com sucesso";
                     return RedirectToAction("Index");
