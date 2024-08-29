@@ -1,4 +1,4 @@
-﻿@model List<VeiculosModel> 
+﻿@model IEnumerable<Intelectah.ViewModel.VeiculosViewModel>
 
 @{
     ViewData["Title"] = "Veiculos";
@@ -50,14 +50,16 @@
             <tbody>
                 @if (Model != null && Model.Any())
                 {
-                    foreach (VeiculosModel veiculo in Model)
+                    foreach (var veiculo in Model)
                     {
                         <tr> 
                             <td></td>
                             <td>@veiculo.ModeloVeiculo</td>
                             <td>@veiculo.AnoFabricacao</td>
-                            <td>@veiculo.ValorVeiculo</td> 
-                            <td>@veiculo.Fabricante?.NomeFabricante</td>
+                            <td>@veiculo.ValorVeiculo</td>
+                            <td>
+                                @veiculo.Fabricantes.FirstOrDefault(f => f.Value == veiculo.FabricanteID.ToString())?.Text
+                            </td>
                             <td>@veiculo.Tipo</td>
                             <td>@veiculo.Descricao</td>                          
                             <td>

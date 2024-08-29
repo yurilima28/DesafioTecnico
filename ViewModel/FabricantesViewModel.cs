@@ -1,18 +1,14 @@
-﻿using Intelectah.Dapper;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
-using Intelectah.Models;
-using static UniqueNomeFabricanteAttribute;
 
-namespace Intelectah.Models
+namespace Intelectah.ViewModel
 {
-    public class FabricantesModel
+    public class FabricantesViewModel
     {
-        [Key]
         public int FabricanteID { get; set; }
 
         [Required(ErrorMessage = "O nome do fabricante é obrigatório")]
         [StringLength(100, ErrorMessage = "O nome do fabricante não pode exceder 100 caracteres.")]
-        [UniqueNomeFabricante]
         public string NomeFabricante { get; set; }
 
         [Required(ErrorMessage = "O país de origem é obrigatório")]
@@ -20,22 +16,33 @@ namespace Intelectah.Models
         public string PaisOrigem { get; set; }
 
         [Required(ErrorMessage = "O ano de fundação é obrigatório")]
-        [AnoAtual]
         public int AnoFundacao { get; set; }
 
         [Required(ErrorMessage = "A URL é obrigatória")]
-        [StringLength(255, ErrorMessage = "A URL não pode conter mais de 255 carcteres")]
+        [StringLength(255, ErrorMessage = "A URL não pode conter mais de 255 caracteres")]
         public string URL { get; set; }
-        public FabricantesModel(int fabricanteID, string nomeFabricante, string paisOrigem, int anoFundacao, string url)
+
+        public IEnumerable<SelectListItem> OpcaoPaises { get; set; }
+
+        public IEnumerable<SelectListItem> TiposFabricantes { get; set; }
+
+
+        public FabricantesViewModel()
+        {
+
+            OpcaoPaises = new List<SelectListItem>();
+            TiposFabricantes = new List<SelectListItem>();
+        }
+
+        public FabricantesViewModel(int fabricanteID, string nomeFabricante, string paisOrigem, int anoFundacao, string url, IEnumerable<SelectListItem> opcaoPaises, IEnumerable<SelectListItem> tiposFabricantes)
         {
             FabricanteID = fabricanteID;
             NomeFabricante = nomeFabricante;
             PaisOrigem = paisOrigem;
             AnoFundacao = anoFundacao;
             URL = url;
-        }
-        public FabricantesModel()
-        {
+            OpcaoPaises = opcaoPaises;
+            TiposFabricantes = tiposFabricantes;
         }
     }
 }

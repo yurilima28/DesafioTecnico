@@ -1,4 +1,4 @@
-﻿@model VeiculosModel
+﻿@model Intelectah.ViewModel.VeiculosViewModel
 @using Intelectah.Enums
 @using Microsoft.AspNetCore.Mvc.Rendering
 
@@ -20,25 +20,22 @@
     </div>
     <div class="form-group col-md-6">
         <label asp-for="Tipo">Tipo de veículo</label>
-        <select asp-for="Tipo" class="form-control">
-            @foreach (var tipo in Enum.GetValues(typeof(Intelectah.Enums.TipoVeiculo)))
-            {
-                <option value="@tipo">@tipo</option>
-            }
+        <select asp-for="Tipo" class="form-control" asp-items="Model.TiposVeiculos">
+            <option value="">Selecione um Tipo</option>
         </select>
         <span asp-validation-for="Tipo" class="text-danger"></span>
     </div>
     <div class="form-group col-md-6">
         <label asp-for="FabricanteID">Fabricante</label>
-        <select asp-for="FabricanteID" class="form-control" asp-items="ViewBag.Fabricantes">
+        <select asp-for="FabricanteID" class="form-control" asp-items="Model.Fabricantes">
             <option value="">Selecione um Fabricante</option>
         </select>
         <span asp-validation-for="FabricanteID" class="text-danger"></span>
     </div>
+
     <div class="form-group">
         <label asp-for="Descricao">Descrição do veículo</label>
         <textarea asp-for="Descricao" class="form-control"></textarea>
         <span asp-validation-for="Descricao" class="text-danger"></span>
     </div>
-
 </div>
