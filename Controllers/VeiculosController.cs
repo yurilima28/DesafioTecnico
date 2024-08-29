@@ -18,9 +18,9 @@ namespace Intelectah.Controllers
         }
         public IActionResult Index()
         {
-            var veiculos = _veiculosRepositorio.BuscarTodos();
-            var fabricantes = _fabricantesRepositorio.BuscarTodos();
-            return View(veiculos);
+            var Veiculos = _veiculosRepositorio.BuscarTodos();
+            var Fabricantes = _fabricantesRepositorio.BuscarTodos();
+            return View(Veiculos);
         }
         public IActionResult Criar()
         {
@@ -66,7 +66,6 @@ namespace Intelectah.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var 
                     _veiculosRepositorio.Adicionar(veiculo);
                     TempData["MensagemSucesso"] = "Veículo cadastrado com sucesso";
                     return RedirectToAction("Index");
