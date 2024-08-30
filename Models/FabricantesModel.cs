@@ -26,6 +26,8 @@ namespace Intelectah.Models
         [Required(ErrorMessage = "A URL é obrigatória")]
         [StringLength(255, ErrorMessage = "A URL não pode conter mais de 255 carcteres")]
         public string URL { get; set; }
+        public ICollection<VeiculosModel> Veiculos { get; set; }
+
         public FabricantesModel(int fabricanteID, string nomeFabricante, string paisOrigem, int anoFundacao, string url)
         {
             FabricanteID = fabricanteID;

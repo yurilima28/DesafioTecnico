@@ -13,6 +13,7 @@ builder.Services.AddDbContext<BancoContext>(options =>
 });
 builder.Services.AddScoped<IFabricantesRepositorio, FabricantesRepositorio>();
 builder.Services.AddScoped<IVeiculosRepositorio, VeiculosRepositorio>();
+builder.Services.AddScoped<IConcessionariasRepositorio, ConcessionariasRepositorio>();
 builder.Services.AddHttpClient<CountryService>();
 
 var app = builder.Build();

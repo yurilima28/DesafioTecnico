@@ -1,6 +1,7 @@
 ﻿using Intelectah.Dapper;
 using Intelectah.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace Intelectah.Models
 {
@@ -29,6 +30,8 @@ namespace Intelectah.Models
 
         [Required]
         public int FabricanteID { get; set; }
+
+        public FabricantesModel Fabricantes { get; set; }
 
         public VeiculosModel(int veiculoID, string modeloVeiculo, int anoFabricacao, decimal valorVeiculo, TipoVeiculo tipo, string descricao, int fabricanteID)
         {

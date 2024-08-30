@@ -10,8 +10,21 @@ namespace Intelectah.Dapper
         }
         public DbSet<FabricantesModel> Fabricantes { get; set; }
         public DbSet<VeiculosModel> Veiculos { get; set; }
+        public DbSet<ConcessionariasModel> Concessionarias { get; set; }
 
-      
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<VeiculosModel>()
+                .HasOne(v => v.Fabricantes)
+                .WithMany(f => f.Veiculos)
+                .HasForeignKey(v => v.FabricanteID)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ConcessionariasModel>()
+                .HasNoKey();
+        }
     }
 }
  

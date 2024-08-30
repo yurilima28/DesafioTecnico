@@ -1,0 +1,15 @@
+﻿@model Intelectah.Models.ConcessionariasModel
+
+@{
+    ViewData["Title"] = "Confirmar Exclusão";
+}
+
+<h1>Confirmar Exclusão</h1>
+
+<p>Tem certeza de que deseja excluir a concessionária <strong>@Model.Nome</strong>?</p>
+
+<form asp-action="Apagar">
+    <input type="hidden" asp-for="ConcessionariaID" />
+    <button type="submit" class="btn btn-danger">Excluir</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
