@@ -5,7 +5,7 @@ namespace Intelectah.Dapper
 {
     public class BancoContext : DbContext
     {
-        public BancoContext(DbContextOptions<BancoContext> options) : base(options) 
+        public BancoContext(DbContextOptions<BancoContext> options) : base(options)
         {
         }
         public DbSet<FabricantesModel> Fabricantes { get; set; }
@@ -23,8 +23,11 @@ namespace Intelectah.Dapper
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ConcessionariasModel>()
-                .HasNoKey();
+                .HasKey(c => c.ConcessionariaID);
+
+            modelBuilder.Entity<ConcessionariasModel>()
+                .Property(c => c.ConcessionariaID)
+                .ValueGeneratedOnAdd();
         }
     }
 }
- 

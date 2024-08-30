@@ -15,7 +15,7 @@ namespace Intelectah.ViewModel
         public string Nome { get; set; }
 
         [Required]
-        public EnderecoViewModel Endereco { get; set; }
+        public EnderecoViewModel Endereco { get; set; } = new EnderecoViewModel();
 
         [Required]
         [StringLength(15, ErrorMessage = "O telefone deve ter no máximo 15 caracteres.")]

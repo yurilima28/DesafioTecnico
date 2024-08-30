@@ -23,6 +23,12 @@ namespace Intelectah.Migrations
 
             modelBuilder.Entity("Intelectah.Models.ConcessionariasModel", b =>
                 {
+                    b.Property<int>("ConcessionariaID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ConcessionariaID"), 1L, 1);
+
                     b.Property<string>("CEP")
                         .IsRequired()
                         .HasMaxLength(10)
@@ -35,9 +41,6 @@ namespace Intelectah.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<int>("ConcessionariaID")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -63,6 +66,8 @@ namespace Intelectah.Migrations
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("nvarchar(15)");
+
+                    b.HasKey("ConcessionariaID");
 
                     b.ToTable("Concessionarias");
                 });

@@ -31,7 +31,7 @@
     <table class="table text-center" id="tabela-concessionarias">
         <thead>
             <tr>
-                <th scope="col">ID</th>
+                <th scope="col"></th>
                 <th scope="col">Nome</th>
                 <th scope="col">Endereço Completo</th>
                 <th scope="col">Cidade</th>
@@ -48,7 +48,7 @@
             @foreach (var concessionaria in Model)
             {
                 <tr>
-                    <td>@concessionaria.ConcessionariaID</td>
+                    <td></td>
                     <td>@concessionaria.Nome</td>
                     <td>@concessionaria.Endereco.EnderecoCompleto</td>
                     <td>@concessionaria.Endereco.Cidade</td>
