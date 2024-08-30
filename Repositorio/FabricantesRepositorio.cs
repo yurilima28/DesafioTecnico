@@ -1,5 +1,6 @@
 ﻿using Intelectah.Dapper;
 using Intelectah.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Intelectah.Repositorio
 {
@@ -24,6 +25,12 @@ namespace Intelectah.Repositorio
             _bancoContext.Fabricantes.Add(fabricante);
             _bancoContext.SaveChanges();
             return fabricante;
+        }
+
+        public async Task AdicionarAsync(FabricantesModel fabricante)
+        {
+            await _bancoContext.Fabricantes.AddAsync(fabricante);
+            await _bancoContext.SaveChangesAsync();
         }
 
         public FabricantesModel Atualizar(FabricantesModel fabricante)
@@ -58,6 +65,6 @@ namespace Intelectah.Repositorio
         {
             return _bancoContext.Fabricantes
         .FirstOrDefault(f => f.NomeFabricante.ToLower() == nomeFabricante.ToLower());
-        }
+        }        
     }
 }

@@ -24,17 +24,13 @@ namespace Intelectah.ViewModel
 
         public IEnumerable<SelectListItem> OpcaoPaises { get; set; }
 
-        public IEnumerable<SelectListItem> TiposFabricantes { get; set; }
-
-
         public FabricantesViewModel()
         {
 
             OpcaoPaises = new List<SelectListItem>();
-            TiposFabricantes = new List<SelectListItem>();
         }
 
-        public FabricantesViewModel(int fabricanteID, string nomeFabricante, string paisOrigem, int anoFundacao, string url, IEnumerable<SelectListItem> opcaoPaises, IEnumerable<SelectListItem> tiposFabricantes)
+        public FabricantesViewModel(int fabricanteID, string nomeFabricante, string paisOrigem, int anoFundacao, string url, IEnumerable<SelectListItem> opcaoPaises)
         {
             FabricanteID = fabricanteID;
             NomeFabricante = nomeFabricante;
@@ -42,7 +38,6 @@ namespace Intelectah.ViewModel
             AnoFundacao = anoFundacao;
             URL = url;
             OpcaoPaises = opcaoPaises;
-            TiposFabricantes = tiposFabricantes;
         }
     }
 }

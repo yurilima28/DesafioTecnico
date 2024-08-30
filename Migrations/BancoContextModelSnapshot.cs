@@ -84,25 +84,7 @@ namespace Intelectah.Migrations
 
                     b.HasKey("VeiculoID");
 
-                    b.HasIndex("FabricanteID");
-
                     b.ToTable("Veiculos");
-                });
-
-            modelBuilder.Entity("Intelectah.Models.VeiculosModel", b =>
-                {
-                    b.HasOne("Intelectah.Models.FabricantesModel", "Fabricante")
-                        .WithMany("Veiculos")
-                        .HasForeignKey("FabricanteID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Fabricante");
-                });
-
-            modelBuilder.Entity("Intelectah.Models.FabricantesModel", b =>
-                {
-                    b.Navigation("Veiculos");
                 });
 #pragma warning restore 612, 618
         }

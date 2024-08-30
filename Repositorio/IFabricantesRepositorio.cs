@@ -10,6 +10,7 @@ namespace Intelectah.Repositorio
         FabricantesModel Atualizar(FabricantesModel fabricante);
         bool Apagar(int Id);
         FabricantesModel ObterPorNome(string nomeFabricante);
+        Task AdicionarAsync(FabricantesModel fabricante);   
     }
 
 }

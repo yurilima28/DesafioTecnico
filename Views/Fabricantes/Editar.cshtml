@@ -1,14 +1,12 @@
-﻿@model FabricantesModel
+﻿@using Intelectah.ViewModel
+@model FabricantesViewModel
 
 @{
     ViewData["Title"] = "Editar fabricante";
 }
 
-
 <div class="text-center">
-
     <h1 class="display-4">Editar fabricante</h1>
-
 </div>
 
 <form asp-controller="Fabricantes" asp-action="Alterar" method="post">
@@ -17,7 +15,4 @@
 
     <button type="submit" class="btn btn-primary">Editar</button>
     <a class="btn btn-secondary" asp-controller="Fabricantes" asp-action="Index" role="button">Voltar</a>
-
 </form>
-
-

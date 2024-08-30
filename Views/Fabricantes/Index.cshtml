@@ -1,4 +1,5 @@
-﻿@model List<FabricantesModel>
+﻿@using Intelectah.ViewModel
+@model List<FabricantesViewModel>
 @{
     ViewData["Title"] = "Fabricantes";
 }
@@ -6,7 +7,6 @@
 <script src="~/js/fabricantes.js"></script>
 
 <div class="text-center">
-
     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
         <a class="btn btn-primary" role="button" asp-controller="Fabricantes" asp-action="Criar">Adicionar novo fabricante</a>
     </div>
@@ -15,7 +15,7 @@
     @if (TempData["MensagemSucesso"] != null)
     {
         <div class="alert alert-success" role="alert">
-            <button type="button" class="btn btn-danger btn-sm close-alert" arial="Close">X</button>
+            <button type="button" class="btn btn-danger btn-sm close-alert" aria-label="Close">X</button>
             @TempData["MensagemSucesso"]
         </div>
     }
@@ -23,50 +23,43 @@
     @if (TempData["MensagemErro"] != null)
     {
         <div class="alert alert-danger" role="alert">
-
-            <button type="button" class="btn btn-danger btn-sm close-alert" arial="Close">X</button>
+            <button type="button" class="btn btn-danger btn-sm close-alert" aria-label="Close">X</button>
             @TempData["MensagemErro"]
         </div>
     }
 
-    <b />
-
     <h1 class="display-4">Lista de fabricantes</h1>
-    <form>
-        <table class="table text-center" id="tabela-fabricantes">
-            <thead>
-                <tr>
-                    <th scope="col"></th>
-                    <th scope="col">Nome do fabricante</th>
-                    <th scope="col">País de origem</th>
-                    <th scope="col">Ano de fundação</th>
-                    <th scope="col">URL</th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model != null && Model.Any())
+    <table class="table text-center" id="tabela-fabricantes">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Nome do fabricante</th>
+                <th scope="col">País de origem</th>
+                <th scope="col">Ano de fundação</th>
+                <th scope="col">URL</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var fabricante in Model)
                 {
-                    foreach (FabricantesModel fabricante in Model)
-                    {
-                        <tr>
-                            <td>@fabricante.FabricanteID</td>
-                            <td>@fabricante.NomeFabricante</td>
-                            <td>@fabricante.PaisOrigem</td>
-                            <td>@fabricante.AnoFundacao</td>
-                            <td>@fabricante.URL</td>
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <a role="button" class="btn btn-primary" asp-route-id="@fabricante.FabricanteID" asp-controller="Fabricantes" asp-action="Editar">Editar</a>
-                                    <a role="button" class="btn btn-danger" asp-route-id="@fabricante.FabricanteID" asp-controller="Fabricantes" asp-action="ApagarConfirmacao">Apagar</a>
-                                </div>
-                            </td>
-                        </tr>
-                    }
+                    <tr>
+                        <td>@fabricante.FabricanteID</td>
+                        <td>@fabricante.NomeFabricante</td>
+                        <td>@fabricante.PaisOrigem</td>
+                        <td>@fabricante.AnoFundacao</td>
+                        <td>@fabricante.URL</td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a role="button" class="btn btn-primary" asp-route-id="@fabricante.FabricanteID" asp-controller="Fabricantes" asp-action="Editar">Editar</a>
+                                <a role="button" class="btn btn-danger" asp-route-id="@fabricante.FabricanteID" asp-controller="Fabricantes" asp-action="ApagarConfirmacao">Apagar</a>
+                            </div>
+                        </td>
+                    </tr>
                 }
-            </tbody>
-        </table>
-    </form>
+            }
+        </tbody>
+    </table>
 </div>
-
-

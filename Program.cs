@@ -1,5 +1,6 @@
 using Intelectah.Dapper;
 using Intelectah.Repositorio;
+using Intelectah.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,7 @@ builder.Services.AddDbContext<BancoContext>(options =>
 });
 builder.Services.AddScoped<IFabricantesRepositorio, FabricantesRepositorio>();
 builder.Services.AddScoped<IVeiculosRepositorio, VeiculosRepositorio>();
-
+builder.Services.AddHttpClient<CountryService>();
 
 var app = builder.Build();
 
