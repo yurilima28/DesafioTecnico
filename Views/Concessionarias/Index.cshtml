@@ -1,5 +1,5 @@
-﻿@using Intelectah.Models
-@model IEnumerable<ConcessionariasModel>
+﻿@model IEnumerable<Intelectah.ViewModel.ConcessionariasViewModel>
+
 
 @{
     ViewData["Title"] = "Concessionárias";
@@ -50,10 +50,10 @@
                 <tr>
                     <td>@concessionaria.ConcessionariaID</td>
                     <td>@concessionaria.Nome</td>
-                    <td>@concessionaria.EnderecoCompleto</td>
-                    <td>@concessionaria.Cidade</td>
-                    <td>@concessionaria.Estado</td>
-                    <td>@concessionaria.CEP</td>
+                    <td>@concessionaria.Endereco.EnderecoCompleto</td>
+                    <td>@concessionaria.Endereco.Cidade</td>
+                    <td>@concessionaria.Endereco.Estado</td>
+                    <td>@concessionaria.Endereco.CEP</td>
                     <td>@concessionaria.Telefone</td>
                     <td>@concessionaria.Email</td>
                     <td>@concessionaria.CapacidadeMax</td>

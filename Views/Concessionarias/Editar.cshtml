@@ -1,4 +1,4 @@
-﻿@model Intelectah.ViewModel.ConcessionariasViewModel
+﻿@model IEnumerable<Intelectah.Models.ConcessionariasModel>
 
 @{
     ViewData["Title"] = "Editar Concessionária";
@@ -7,4 +7,4 @@
 
 <h1>Editar Concessionária</h1>
 
-@Html.Partial("_Form", Model)
+@Html.Partial("Forms", Model)

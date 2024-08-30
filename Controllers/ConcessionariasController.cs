@@ -21,7 +21,7 @@ namespace Intelectah.Controllers
 
             var viewModel = concessionarias.Select(c => new ConcessionariasViewModel
             {
-                ConcessionariaId = c.ConcessionariaID,
+                ConcessionariaID = c.ConcessionariaID,
                 Nome = c.Nome,
                 Endereco = new EnderecoViewModel
                 {
@@ -85,7 +85,7 @@ namespace Intelectah.Controllers
 
             var viewModel = new ConcessionariasViewModel
             {
-                ConcessionariaId = concessionaria.ConcessionariaID,
+                ConcessionariaID = concessionaria.ConcessionariaID,
                 Nome = concessionaria.Nome,
                 Endereco = new EnderecoViewModel
                 {
@@ -110,7 +110,7 @@ namespace Intelectah.Controllers
             {
                 var concessionaria = new ConcessionariasModel
                 {
-                    ConcessionariaID = viewModel.ConcessionariaId,
+                    ConcessionariaID = viewModel.ConcessionariaID,
                     Nome = viewModel.Nome,
                     EnderecoCompleto = viewModel.Endereco.EnderecoCompleto,
                     Cidade = viewModel.Endereco.Cidade,

@@ -8,7 +8,7 @@ namespace Intelectah.ViewModel
 {
     public class ConcessionariasViewModel
     {
-        public int ConcessionariaId { get; set; }
+        public int ConcessionariaID { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "O nome da concessionária deve ter no máximo 100 caracteres.")]

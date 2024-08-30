@@ -1,41 +1,66 @@
-﻿@model Intelectah.ViewModel.VeiculosViewModel
-@using Intelectah.Enums
-@using Microsoft.AspNetCore.Mvc.Rendering
+﻿@model Intelectah.ViewModel.ConcessionariasViewModel
 
-<div class="row">
-    <div class="form-group col-md-6">
-        <label asp-for="ModeloVeiculo">Modelo</label>
-        <input asp-for="ModeloVeiculo" class="form-control" />
-        <span asp-validation-for="ModeloVeiculo" class="text-danger"></span>
+<form asp-action="@ViewData["FormAction"]" method="post">
+    @Html.AntiForgeryToken()
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="Nome" class="control-label"></label>
+            <input asp-for="Nome" class="form-control" />
+            <span asp-validation-for="Nome" class="text-danger"></span>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label asp-for="Telefone" class="control-label"></label>
+            <input asp-for="Telefone" class="form-control" />
+            <span asp-validation-for="Telefone" class="text-danger"></span>
+        </div>
     </div>
-    <div class="form-group col-md-6">
-        <label asp-for="AnoFabricacao">Ano de fabricação</label>
-        <input asp-for="AnoFabricacao" class="form-control" />
-        <span asp-validation-for="AnoFabricacao" class="text-danger"></span>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label asp-for="CapacidadeMax" class="control-label"></label>
+            <input asp-for="CapacidadeMax" class="form-control" />
+            <span asp-validation-for="CapacidadeMax" class="text-danger"></span>
+        </div>
     </div>
-    <div class="form-group col-md-6">
-        <label asp-for="ValorVeiculo">Valor do veículo R$</label>
-        <input asp-for="ValorVeiculo" class="form-control" />
-        <span asp-validation-for="ValorVeiculo" class="text-danger"></span>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="Endereco.EnderecoCompleto" class="control-label"></label>
+            <input asp-for="Endereco.EnderecoCompleto" class="form-control" />
+            <span asp-validation-for="Endereco.EnderecoCompleto" class="text-danger"></span>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label asp-for="Endereco.Cidade" class="control-label"></label>
+            <input asp-for="Endereco.Cidade" class="form-control" />
+            <span asp-validation-for="Endereco.Cidade" class="text-danger"></span>
+        </div>
     </div>
-    <div class="form-group col-md-6">
-        <label asp-for="Tipo">Tipo de veículo</label>
-        <select asp-for="Tipo" class="form-control" asp-items="Model.TiposVeiculos">
-            <option value="">Selecione um Tipo</option>
-        </select>
-        <span asp-validation-for="Tipo" class="text-danger"></span>
-    </div>
-    <div class="form-group col-md-6">
-        <label asp-for="FabricanteID">Fabricante</label>
-        <select asp-for="FabricanteID" class="form-control" asp-items="Model.Fabricantes">
-            <option value="">Selecione um Fabricante</option>
-        </select>
-        <span asp-validation-for="FabricanteID" class="text-danger"></span>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="Endereco.Estado" class="control-label"></label>
+            <input asp-for="Endereco.Estado" class="form-control" />
+            <span asp-validation-for="Endereco.Estado" class="text-danger"></span>
+        </div>
+
+        <div class="form-group col-md-6">
+            <label asp-for="Endereco.CEP" class="control-label"></label>
+            <input asp-for="Endereco.CEP" class="form-control" />
+            <span asp-validation-for="Endereco.CEP" class="text-danger"></span>
+        </div>
     </div>
 
     <div class="form-group">
-        <label asp-for="Descricao">Descrição do veículo</label>
-        <textarea asp-for="Descricao" class="form-control"></textarea>
-        <span asp-validation-for="Descricao" class="text-danger"></span>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
     </div>
-</div>
+</form>
