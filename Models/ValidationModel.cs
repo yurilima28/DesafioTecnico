@@ -29,9 +29,9 @@ public class ValidationModel
         }
     }
 
-    public class UniqueNomeConcessionariaAttribute : ValidationAttribute
+    public class UniqueNomeConcessonariaAttribute : ValidationAttribute
     {
-        public UniqueNomeConcessionariaAttribute()
+        public UniqueNomeConcessonariaAttribute()
         {
             ErrorMessage = "O nome da concessonária já está em uso.";
         }
@@ -39,10 +39,10 @@ public class ValidationModel
         {
             if (value != null)
             {
-                var concessionariaRepositorio = (IConcessionariasRepositorio)validationContext.GetService(typeof(IConcessionariasRepositorio));
+                var concessionariasRepositorio = (IConcessionariasRepositorio)validationContext.GetService(typeof(IConcessionariasRepositorio));
                 string nomeConcessionaria = value.ToString();
 
-                var existingConcessionaria = concessionariaRepositorio?.ListarTodosAsync();
+                var existingConcessionaria = concessionariasRepositorio.ObterPorNome(nomeConcessionaria);
                 if (existingConcessionaria != null)
                 {
                     return new ValidationResult(ErrorMessage);

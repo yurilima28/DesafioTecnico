@@ -44,5 +44,11 @@ namespace Intelectah.Repositorio
                 await _bancoContext.SaveChangesAsync();
             }
         }
+
+        public ConcessionariasModel ObterPorNome(string nomeConcessonaria)
+        {
+            return _bancoContext.Concessionarias
+            .FirstOrDefault(f => f.Nome.ToLower() == nomeConcessonaria.ToLower());
+        }
     }
 }
