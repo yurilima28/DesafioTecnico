@@ -22,7 +22,7 @@ namespace Intelectah.Controllers
         }
         private static readonly Dictionary<string, string> CountryTranslations = new Dictionary<string, string>
         {
-           
+
             { "Brazil", "Brasil" }
         };
         private async Task<IEnumerable<SelectListItem>> GetListaPaisesAsync()
@@ -99,10 +99,26 @@ namespace Intelectah.Controllers
             return View(viewModel);
         }
 
-        public IActionResult ApagarConfirmacao(int Id)
+        public async Task<IActionResult> ApagarConfirmacao(int Id)
         {
-            FabricantesModel fabricante = _fabricantesRepositorio.ListarPorId(Id);
-            return View(fabricante);
+            var fabricante = _fabricantesRepositorio.ListarPorId(Id);
+            if (fabricante == null)
+            {
+                TempData["MensagemErro"] = "Fabricante não encontrado.";
+                return RedirectToAction("Index");
+            }
+
+            var viewModel = new FabricantesViewModel
+            {
+                FabricanteID = fabricante.FabricanteID,
+                NomeFabricante = fabricante.NomeFabricante,
+                PaisOrigem = fabricante.PaisOrigem,
+                AnoFundacao = fabricante.AnoFundacao,
+                URL = fabricante.URL,
+                OpcaoPaises = await GetListaPaisesAsync() // Se necessário, adicione a lista de países
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Apagar(int Id)

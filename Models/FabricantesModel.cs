@@ -1,7 +1,7 @@
 ﻿using Intelectah.Dapper;
 using System.ComponentModel.DataAnnotations;
 using Intelectah.Models;
-using static UniqueNomeFabricanteAttribute;
+using static ValidationModel;
 
 namespace Intelectah.Models
 {

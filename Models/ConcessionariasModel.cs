@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using static ValidationModel;
 
 namespace Intelectah.Models
 {
@@ -9,6 +10,7 @@ namespace Intelectah.Models
 
         [Required]
         [StringLength(100, ErrorMessage = "O nome da concessionária deve ter no máximo 100 caracteres.")]
+        [UniqueNomeConcessionaria]
         public string Nome { get; set; }
 
         [Required]

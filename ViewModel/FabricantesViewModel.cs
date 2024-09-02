@@ -1,6 +1,7 @@
 ﻿using Intelectah.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
+using static ValidationModel;
 
 namespace Intelectah.ViewModel
 {
@@ -10,6 +11,7 @@ namespace Intelectah.ViewModel
 
         [Required(ErrorMessage = "O nome do fabricante é obrigatório")]
         [StringLength(100, ErrorMessage = "O nome do fabricante não pode exceder 100 caracteres.")]
+        [UniqueNomeFabricante]
         public string NomeFabricante { get; set; }
 
         [Required(ErrorMessage = "O país de origem é obrigatório")]

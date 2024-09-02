@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Intelectah.Models;
+using static ValidationModel;
 
 namespace Intelectah.ViewModel
 {
@@ -12,6 +13,7 @@ namespace Intelectah.ViewModel
 
         [Required]
         [StringLength(100, ErrorMessage = "O nome da concessionária deve ter no máximo 100 caracteres.")]
+        [UniqueNomeConcessionaria]
         public string Nome { get; set; }
 
         [Required]
