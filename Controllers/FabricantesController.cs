@@ -115,7 +115,6 @@ namespace Intelectah.Controllers
                 PaisOrigem = fabricante.PaisOrigem,
                 AnoFundacao = fabricante.AnoFundacao,
                 URL = fabricante.URL,
-                OpcaoPaises = await GetListaPaisesAsync() // Se necessário, adicione a lista de países
             };
 
             return View(viewModel);

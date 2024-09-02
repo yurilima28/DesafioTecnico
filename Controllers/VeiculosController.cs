@@ -89,6 +89,49 @@ namespace Intelectah.Controllers
 
             return View(viewModel);
         }
+        public async Task<IActionResult> ApagarConfirmacao(int Id)
+        {
+            var veiculo = _veiculosRepositorio.ListarPorId(Id);
+            if (veiculo == null)
+            {
+                TempData["MensagemErro"] = "Veículo não encontrado.";
+                return RedirectToAction("Index");
+            }
+
+            var viewModel = new VeiculosViewModel
+            {
+                VeiculoID = veiculo.VeiculoID,
+                ModeloVeiculo = veiculo.ModeloVeiculo,
+                AnoFabricacao = veiculo.AnoFabricacao,
+                ValorVeiculo = veiculo.ValorVeiculo,
+                FabricanteID = veiculo.FabricanteID,
+                Tipo = veiculo.Tipo
+            };
+
+            return View(viewModel);
+        }
+
+        public IActionResult Apagar(int Id)
+        {
+            try
+            {
+                bool apagado = _veiculosRepositorio.Apagar(Id);
+                if (apagado)
+                {
+                    TempData["MensagemSucesso"] = "Veículo deletado com sucesso";
+                }
+                else
+                {
+                    TempData["MensagemErro"] = "Não foi possível deletar o veículo.";
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception erro)
+            {
+                TempData["MensagemErro"] = $"Não foi possível deletar o veículo, tente novamente. Detalhe do erro: {erro.Message}";
+                return RedirectToAction("Index");
+            }
+        }
 
         [HttpPost]
         public IActionResult Criar(VeiculosViewModel viewModel)
@@ -142,7 +185,7 @@ namespace Intelectah.Controllers
                     AnoFabricacao = viewModel.AnoFabricacao,
                     ValorVeiculo = viewModel.ValorVeiculo,
                     FabricanteID = viewModel.FabricanteID,
-                    Tipo = viewModel.Tipo, // Corrigido para TipoVeiculo
+                    Tipo = viewModel.Tipo,
                     Descricao = viewModel.Descricao
                 };
 
@@ -162,12 +205,13 @@ namespace Intelectah.Controllers
                 .Cast<TipoVeiculo>()
                 .Select(t => new SelectListItem
                 {
-                    Value = ((int)t).ToString(), // Armazena o valor como string
+                    Value = ((int)t).ToString(),
                     Text = t.ToString()
                 })
                 .ToList();
 
             return View(viewModel);
         }
+
     }
 }
