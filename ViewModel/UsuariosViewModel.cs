@@ -1,4 +1,5 @@
 ﻿using Intelectah.Enums;
+using Intelectah.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Intelectah.ViewModel
@@ -22,6 +23,10 @@ namespace Intelectah.ViewModel
 
         [Required(ErrorMessage = "O nível de acesso é obrigatório.")]
         public PerfilEnum NivelAcesso { get; set; }
+
+        public int ConcessionariaID { get; set; }
+
+        public virtual ICollection<ConcessionariasModel> Concessionarias { get; set; }  
 
         public UsuariosViewModel() { }
 

@@ -2,6 +2,7 @@
 using Intelectah.Repositorio;
 using Intelectah.ViewModel;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Intelectah.Controllers
@@ -9,35 +10,34 @@ namespace Intelectah.Controllers
     public class UsuariosController : Controller
     {
         private readonly IUsuariosRepositorio _usuariosRepositorio;
+        private readonly IConcessionariasRepositorio _concessionariasRepositorio;
 
-        public UsuariosController(IUsuariosRepositorio usuariosRepositorio)
+        public UsuariosController(IUsuariosRepositorio usuariosRepositorio, IConcessionariasRepositorio concessionariasRepositorio)
         {
             _usuariosRepositorio = usuariosRepositorio;
+            _concessionariasRepositorio = concessionariasRepositorio;
         }
+
         public async Task<IActionResult> Index()
         {
             var usuarios = await _usuariosRepositorio.ObterTodosUsuariosAsync();
             return View(usuarios);
         }
 
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Criar()
         {
-            var usuario = await _usuariosRepositorio.ObterUsuarioPorIdAsync(id);
-            if (usuario == null)
+            var concessionarias = await _concessionariasRepositorio.ListarTodosAsync();
+            ViewBag.Concessionarias = concessionarias.Select(c => new SelectListItem
             {
-                return NotFound();
-            }
+                Value = c.ConcessionariaID.ToString(),
+                Text = c.Nome
+            }).ToList();
 
-            return View(usuario);
-        }
-
-        public IActionResult Create()
-        {
-            return View();
+            return View(new UsuariosViewModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("NomeUsuario,Senha,Email,NivelAcesso")] UsuariosViewModel usuarioViewModel)
+        public async Task<IActionResult> Criar(UsuariosViewModel usuarioViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -55,7 +55,7 @@ namespace Intelectah.Controllers
             return View(usuarioViewModel);
         }
 
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Editar(int id)
         {
             var usuario = await _usuariosRepositorio.ObterUsuarioPorIdAsync(id);
             if (usuario == null)
@@ -65,19 +65,21 @@ namespace Intelectah.Controllers
 
             var usuarioViewModel = new UsuariosViewModel
             {
+                UsuarioId = usuario.UsuarioID,
                 NomeUsuario = usuario.NomeUsuario,
                 Senha = usuario.Senha,
                 Email = usuario.Email,
-                NivelAcesso = usuario.NivelAcesso
+                NivelAcesso = usuario.NivelAcesso,
+                ConcessionariaID = usuario.ConcessionariaID
             };
 
             return View(usuarioViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("NomeUsuario,Senha,Email,NivelAcesso")] UsuariosViewModel usuariosViewModel)
+        public async Task<IActionResult> Editar(int id, UsuariosViewModel usuarioViewModel)
         {
-            if (id != usuariosViewModel.UsuarioId)
+            if (id != usuarioViewModel.UsuarioId)
             {
                 return NotFound();
             }
@@ -87,10 +89,10 @@ namespace Intelectah.Controllers
                 var usuario = new UsuariosModel
                 {
                     UsuarioID = id,
-                    NomeUsuario = usuariosViewModel.NomeUsuario,
-                    Senha = usuariosViewModel.Senha,
-                    Email = usuariosViewModel.Email,
-                    NivelAcesso = usuariosViewModel.NivelAcesso
+                    NomeUsuario = usuarioViewModel.NomeUsuario,
+                    Senha = usuarioViewModel.Senha,
+                    Email = usuarioViewModel.Email,
+                    NivelAcesso = usuarioViewModel.NivelAcesso
                 };
 
                 try
@@ -112,10 +114,10 @@ namespace Intelectah.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(usuariosViewModel);
+            return View(usuarioViewModel);
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Apagar(int id)
         {
             var usuario = await _usuariosRepositorio.ObterUsuarioPorIdAsync(id);
             if (usuario == null)
@@ -126,11 +128,13 @@ namespace Intelectah.Controllers
             return View(usuario);
         }
 
-        [HttpPost, ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        [HttpPost, ActionName("Apagar")]
+        public async Task<IActionResult> ApagarConfirmacao(int id)
         {
             await _usuariosRepositorio.RemoverUsuarioAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }
 }
+    
+

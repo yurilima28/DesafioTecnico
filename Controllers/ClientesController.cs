@@ -24,27 +24,14 @@ namespace Intelectah.Controllers
                 ClienteID = c.ClienteID,
                 Nome = c.Nome,
                 Email = c.Email,
+                CPF = c.CPF,
                 Telefone = c.Telefone,
                
             }).ToList();
 
             return View(viewModel);
         }
-        public async Task<IActionResult> Index()
-        {
-            var clientes = _clientesRepositorio.BuscarTodos();
-
-            var viewModel = clientes.Select(c => new ClientesViewModel
-            {
-                ClienteID = c.ClienteID,
-                Nome = c.Nome,
-                Email = c.Email,
-                Telefone = c.Telefone,
-            }).ToList();
-
-            return View(viewModel);
-        }
-
+      
         public IActionResult Criar()
         {
             var viewModel = new ClientesViewModel();
@@ -106,7 +93,7 @@ namespace Intelectah.Controllers
                     Telefone = viewModel.Telefone,
                 };
 
-                await _clientesRepositorio.Atualizar(cliente);
+                _clientesRepositorio.Atualizar(cliente);
                 return RedirectToAction("Index");
             }
 
@@ -122,7 +109,7 @@ namespace Intelectah.Controllers
                 return RedirectToAction("Index");
             }
 
-            await _clientesRepositorio.Apagar(id);
+             _clientesRepositorio.Apagar(id);
             return RedirectToAction("Index");
         }
 

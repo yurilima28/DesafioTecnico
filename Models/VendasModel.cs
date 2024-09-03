@@ -6,6 +6,7 @@ namespace Intelectah.Models
 {
     public class VendasModel
     {
+        [Key]
         public int VendaId { get; set; }
 
         [Required(ErrorMessage = "O cliente é obrigatório.")]
