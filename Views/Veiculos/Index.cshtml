@@ -44,7 +44,7 @@
                     <th scope="col">Tipo de veículo</th>
                     <th scope="col">Descrição</th>
                     <th scope="col"></th>
-               
+
                 </tr>
             </thead>
             <tbody>
@@ -52,7 +52,7 @@
                 {
                     foreach (var veiculo in Model)
                     {
-                        <tr> 
+                        <tr>
                             <td></td>
                             <td>@veiculo.ModeloVeiculo</td>
                             <td>@veiculo.AnoFabricacao</td>
@@ -61,7 +61,7 @@
                                 @veiculo.Fabricantes.FirstOrDefault(f => f.Value == veiculo.FabricanteID.ToString())?.Text
                             </td>
                             <td>@veiculo.Tipo</td>
-                            <td>@veiculo.Descricao</td>                          
+                            <td>@veiculo.Descricao</td>
                             <td>
                                 <div class="btn-group" role="group">
                                     <a role="button" class="btn btn-primary" asp-route-id="@veiculo.VeiculoID" asp-controller="Veiculos" asp-action="Editar">Editar</a>

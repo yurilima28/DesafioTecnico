@@ -44,6 +44,10 @@ namespace Intelectah.Models
         [Range(1, int.MaxValue, ErrorMessage = "A capacidade máxima de veículos deve ser um valor positivo.")]
         public int CapacidadeMax{ get; set; }
 
+        public virtual ICollection<UsuariosModel> Usuarios { get; set; }
+        public virtual ICollection<VendasModel> Vendas { get; set; }  
+
+
         public ConcessionariasModel(int concessionariaID, string nome, string enderecoCompleto, string cidade, string estado, string cep, string telefone, string email, int capacidadeMax)
         {
             ConcessionariaID = concessionariaID;

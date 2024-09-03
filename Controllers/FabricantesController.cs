@@ -167,7 +167,7 @@ namespace Intelectah.Controllers
         }
 
         [HttpPost]
-        public IActionResult Alterar(FabricantesViewModel viewModel)
+        public async Task<IActionResult> Alterar(FabricantesViewModel viewModel)
         {
             try
             {
