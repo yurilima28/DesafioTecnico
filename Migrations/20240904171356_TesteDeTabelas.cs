@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Intelectah.Migrations
 {
-    public partial class RelacionandoProjeto : Migration
+    public partial class TesteDeTabelas : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -103,17 +103,16 @@ namespace Intelectah.Migrations
                     Tipo = table.Column<int>(type: "int", nullable: false),
                     Descricao = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     FabricanteID = table.Column<int>(type: "int", nullable: false),
-                    ConcessionariaID = table.Column<int>(type: "int", nullable: false)
+                    ConcessionariasModelConcessionariaID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Veiculos", x => x.VeiculoID);
                     table.ForeignKey(
-                        name: "FK_Veiculos_Concessionarias_ConcessionariaID",
-                        column: x => x.ConcessionariaID,
+                        name: "FK_Veiculos_Concessionarias_ConcessionariasModelConcessionariaID",
+                        column: x => x.ConcessionariasModelConcessionariaID,
                         principalTable: "Concessionarias",
-                        principalColumn: "ConcessionariaID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ConcessionariaID");
                     table.ForeignKey(
                         name: "FK_Veiculos_Fabricantes_FabricanteID",
                         column: x => x.FabricanteID,
@@ -168,9 +167,9 @@ namespace Intelectah.Migrations
                 column: "ConcessionariaID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Veiculos_ConcessionariaID",
+                name: "IX_Veiculos_ConcessionariasModelConcessionariaID",
                 table: "Veiculos",
-                column: "ConcessionariaID");
+                column: "ConcessionariasModelConcessionariaID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Veiculos_FabricanteID",

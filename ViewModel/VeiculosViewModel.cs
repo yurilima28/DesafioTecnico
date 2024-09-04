@@ -13,7 +13,6 @@ namespace Intelectah.ViewModel
         public string Descricao { get; set; }
         public int FabricanteID { get; set; }
         public int ConcessionariaID { get; set; }
-        public string NomeConcessionaria { get; set; }
         public IEnumerable<SelectListItem> Fabricantes { get; set; }
         public IEnumerable<SelectListItem> TiposVeiculos { get; set; }
         public IEnumerable<SelectListItem> Concessionarias { get; set; }
@@ -27,7 +26,6 @@ namespace Intelectah.ViewModel
             Tipo = tipo;
             Descricao = descricao;
             FabricanteID = fabricanteID;
-            NomeConcessionaria = nomeConcessionaria;
         }
 
         public VeiculosViewModel()
@@ -37,7 +35,7 @@ namespace Intelectah.ViewModel
             Concessionarias = new List<SelectListItem>();
 
         }
-        public VeiculosViewModel(int veiculoID, string modeloVeiculo, int anoFabricacao, decimal valorVeiculo, TipoVeiculo tipo, string descricao, int fabricanteID, IEnumerable<SelectListItem> fabricantes, IEnumerable<SelectListItem> tiposVeiculos, IEnumerable<SelectListItem> concessionarias, string nomeConcessionaria)
+        public VeiculosViewModel(int veiculoID, string modeloVeiculo, int anoFabricacao, decimal valorVeiculo, TipoVeiculo tipo, string descricao, int fabricanteID, IEnumerable<SelectListItem> fabricantes, IEnumerable<SelectListItem> tiposVeiculos, IEnumerable<SelectListItem> concessionarias)
         {
             VeiculoID = veiculoID;
             ModeloVeiculo = modeloVeiculo;
@@ -49,7 +47,6 @@ namespace Intelectah.ViewModel
             Fabricantes = fabricantes;
             TiposVeiculos = tiposVeiculos;
             Concessionarias = concessionarias;
-            NomeConcessionaria = nomeConcessionaria;
 
         }
     }

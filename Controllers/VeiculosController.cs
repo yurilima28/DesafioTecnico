@@ -11,20 +11,17 @@ namespace Intelectah.Controllers
     {
         private readonly IVeiculosRepositorio _veiculosRepositorio;
         private readonly IFabricantesRepositorio _fabricantesRepositorio;
-        private readonly IConcessionariasRepositorio _concessionariasRepositorio;
 
-        public VeiculosController(IVeiculosRepositorio veiculosRepositorio, IFabricantesRepositorio fabricantesRepositorio, IConcessionariasRepositorio concessionariasRepositorio)
+        public VeiculosController(IVeiculosRepositorio veiculosRepositorio, IFabricantesRepositorio fabricantesRepositorio)
         {
             _veiculosRepositorio = veiculosRepositorio;
             _fabricantesRepositorio = fabricantesRepositorio;
-            _concessionariasRepositorio = concessionariasRepositorio;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             var veiculos = _veiculosRepositorio.BuscarTodos();
-            var fabricantes = _fabricantesRepositorio.BuscarTodos().ToList();
-            var concessionarias = await _concessionariasRepositorio.ListarTodosAsync();
+            var fabricantes = _fabricantesRepositorio.BuscarTodos();
 
             var veiculosViewModel = veiculos.Select(v => new VeiculosViewModel
             {
@@ -35,7 +32,6 @@ namespace Intelectah.Controllers
                 FabricanteID = v.FabricanteID,
                 Tipo = v.Tipo,
                 Descricao = v.Descricao,
-                NomeConcessionaria = concessionarias.FirstOrDefault(c => c.ConcessionariaID == v.ConcessionariaID)?.Nome,
                 Fabricantes = fabricantes.Select(f => new SelectListItem
                 {
                     Value = f.FabricanteID.ToString(),
@@ -49,7 +45,6 @@ namespace Intelectah.Controllers
         public IActionResult Criar()
         {
             var fabricantes = _fabricantesRepositorio.BuscarTodos();
-            var concessionarias = _veiculosRepositorio.ObterConcessionarias();
 
             var viewModel = new VeiculosViewModel
             {
@@ -58,22 +53,19 @@ namespace Intelectah.Controllers
                     Value = f.FabricanteID.ToString(),
                     Text = f.NomeFabricante
                 }).ToList(),
-                Concessionarias = concessionarias.Select(c => new SelectListItem
-                {
-                    Value = c.ConcessionariaID.ToString(),
-                    Text = c.Nome
-                }).ToList(),
                 TiposVeiculos = Enum.GetValues(typeof(TipoVeiculo))
-               .Cast<TipoVeiculo>()
-               .Select(t => new SelectListItem
-               {
-                   Value = t.ToString(),
-                   Text = t.ToString()
-               })
-               .ToList()
-                };
+                    .Cast<TipoVeiculo>()
+                    .Select(t => new SelectListItem
+                    {
+                        Value = t.ToString(),
+                        Text = t.ToString()
+                    })
+                    .ToList()
+            };
+
             return View(viewModel);
         }
+
         public IActionResult Editar(int id)
         {
             var veiculo = _veiculosRepositorio.ListarPorId(id);
@@ -83,7 +75,6 @@ namespace Intelectah.Controllers
             }
 
             var fabricantes = _fabricantesRepositorio.BuscarTodos();
-            var concessionarias = _veiculosRepositorio.ObterConcessionarias();
 
             var viewModel = new VeiculosViewModel
             {
@@ -92,7 +83,6 @@ namespace Intelectah.Controllers
                 AnoFabricacao = veiculo.AnoFabricacao,
                 ValorVeiculo = veiculo.ValorVeiculo,
                 FabricanteID = veiculo.FabricanteID,
-                ConcessionariaID = veiculo.ConcessionariaID,
                 Tipo = veiculo.Tipo,
                 Descricao = veiculo.Descricao,
 
@@ -102,17 +92,11 @@ namespace Intelectah.Controllers
                     Text = f.NomeFabricante
                 }).ToList(),
 
-                Concessionarias = concessionarias.Select(c => new SelectListItem
-                {
-                    Value = c.ConcessionariaID.ToString(),
-                    Text = c.Nome
-                }).ToList(),
-
                 TiposVeiculos = Enum.GetValues(typeof(TipoVeiculo))
                     .Cast<TipoVeiculo>()
                     .Select(t => new SelectListItem
                     {
-                        Value = ((int)t).ToString(),
+                        Value = t.ToString(),
                         Text = t.ToString()
                     })
                     .ToList()
@@ -120,9 +104,10 @@ namespace Intelectah.Controllers
 
             return View(viewModel);
         }
-        public async Task<IActionResult> ApagarConfirmacao(int Id)
+
+        public async Task<IActionResult> ApagarConfirmacao(int id)
         {
-            var veiculo = _veiculosRepositorio.ListarPorId(Id);
+            var veiculo = _veiculosRepositorio.ListarPorId(id);
             if (veiculo == null)
             {
                 TempData["MensagemErro"] = "Veículo não encontrado.";
@@ -140,28 +125,6 @@ namespace Intelectah.Controllers
             };
 
             return View(viewModel);
-        }
-
-        public IActionResult Apagar(int Id)
-        {
-            try
-            {
-                bool apagado = _veiculosRepositorio.Apagar(Id);
-                if (apagado)
-                {
-                    TempData["MensagemSucesso"] = "Veículo deletado com sucesso";
-                }
-                else
-                {
-                    TempData["MensagemErro"] = "Não foi possível deletar o veículo.";
-                }
-                return RedirectToAction("Index");
-            }
-            catch (Exception erro)
-            {
-                TempData["MensagemErro"] = $"Não foi possível deletar o veículo, tente novamente. Detalhe do erro: {erro.Message}";
-                return RedirectToAction("Index");
-            }
         }
 
         [HttpPost]
@@ -216,7 +179,6 @@ namespace Intelectah.Controllers
                     AnoFabricacao = viewModel.AnoFabricacao,
                     ValorVeiculo = viewModel.ValorVeiculo,
                     FabricanteID = viewModel.FabricanteID,
-                    ConcessionariaID = viewModel.ConcessionariaID,
                     Tipo = viewModel.Tipo,
                     Descricao = viewModel.Descricao,
                 };
@@ -227,25 +189,17 @@ namespace Intelectah.Controllers
             }
 
             var fabricantes = _fabricantesRepositorio.BuscarTodos();
-            var concessionarias = _veiculosRepositorio.ObterConcessionarias();
-
             viewModel.Fabricantes = fabricantes.Select(f => new SelectListItem
             {
                 Value = f.FabricanteID.ToString(),
                 Text = f.NomeFabricante
             }).ToList();
 
-            viewModel.Concessionarias = concessionarias.Select(c => new SelectListItem
-            {
-                Value = c.ConcessionariaID.ToString(),
-                Text = c.Nome
-            }).ToList();
-
             viewModel.TiposVeiculos = Enum.GetValues(typeof(TipoVeiculo))
                 .Cast<TipoVeiculo>()
                 .Select(t => new SelectListItem
                 {
-                    Value = ((int)t).ToString(),
+                    Value = t.ToString(),
                     Text = t.ToString()
                 })
                 .ToList();
@@ -253,5 +207,26 @@ namespace Intelectah.Controllers
             return View(viewModel);
         }
 
+        public IActionResult Apagar(int id)
+        {
+            try
+            {
+                bool apagado = _veiculosRepositorio.Apagar(id);
+                if (apagado)
+                {
+                    TempData["MensagemSucesso"] = "Veículo deletado com sucesso";
+                }
+                else
+                {
+                    TempData["MensagemErro"] = "Não foi possível deletar o veículo.";
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception erro)
+            {
+                TempData["MensagemErro"] = $"Não foi possível deletar o veículo, tente novamente. Detalhe do erro: {erro.Message}";
+                return RedirectToAction("Index");
+            }
+        }
     }
 }

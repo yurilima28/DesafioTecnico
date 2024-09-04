@@ -7,13 +7,18 @@
 
 <div class="text-center">
 
-    <h1 class="display-4">Editar fabricante</h1>
+    <h1 class="display-4">Editar veículo</h1>
 
 </div>
 
 <form asp-controller="Veiculos" asp-action="Editar" method="post">
     <input type="hidden" asp-for="VeiculoID" />
     @Html.Partial("Forms.cshtml")
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary" style="margin-top:10px">Salvar</button>
+        <a asp-action="Index" class="btn btn-secondary" style="margin-top:10px">Cancelar</a>
+    </div>
 </form>
 
 

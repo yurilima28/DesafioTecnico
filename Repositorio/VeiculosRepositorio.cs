@@ -22,8 +22,15 @@ namespace Intelectah.Repositorio
         }
         public VeiculosModel Adicionar(VeiculosModel veiculo)
         {
+            var fabricante = _bancoContext.Fabricantes.Find(veiculo.FabricanteID);
+            if (fabricante == null)
+            {
+                throw new ArgumentException($"Fabricante com ID {veiculo.FabricanteID} não encontrado.");
+            }
+
             _bancoContext.Veiculos.Add(veiculo);
             _bancoContext.SaveChanges();
+
             return veiculo;
         }
         public VeiculosModel Atualizar(VeiculosModel veiculo)
@@ -59,11 +66,6 @@ namespace Intelectah.Repositorio
             _bancoContext.Veiculos.Remove(veiculoDB);
             _bancoContext.SaveChanges();
             return true;
-        }
-
-        public IEnumerable<ConcessionariasModel> ObterConcessionarias()
-        {
-            return _bancoContext.Concessionarias.ToList();
         }
 
     }
