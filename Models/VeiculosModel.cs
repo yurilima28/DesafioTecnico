@@ -30,8 +30,12 @@ namespace Intelectah.Models
 
         [Required]
         public int FabricanteID { get; set; }
+        [Required]
+        public int ConcessionariaID { get; set; }
 
         public FabricantesModel Fabricantes { get; set; }
+
+        public ConcessionariasModel Concessionarias { get; set; }
 
         public VeiculosModel(int veiculoID, string modeloVeiculo, int anoFabricacao, decimal valorVeiculo, TipoVeiculo tipo, string descricao, int fabricanteID)
         {

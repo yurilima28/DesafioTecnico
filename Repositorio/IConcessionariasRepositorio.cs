@@ -8,7 +8,7 @@ namespace Intelectah.Repositorio
         Task<ConcessionariasModel> ListarPorIdAsync(int id);
         Task AdicionarAsync(ConcessionariasModel concessionaria);
         Task AtualizarAsync(ConcessionariasModel concessionaria);
-        Task RemoverAsync(int id);
+        bool Apagar(int Id);
         ConcessionariasModel ObterPorNome(string nomeConcessionaria);
     }
 }

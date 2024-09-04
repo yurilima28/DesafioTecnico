@@ -26,8 +26,7 @@ namespace Intelectah.ViewModel
 
         public int ConcessionariaID { get; set; }
 
-        public virtual ICollection<ConcessionariasModel> Concessionarias { get; set; }  
-
+        public virtual ICollection<ConcessionariasModel> Concessionarias { get; set; }
         public UsuariosViewModel() { }
 
         public UsuariosViewModel(string nomeUsuario, string senha, string email, PerfilEnum nivelAcesso)

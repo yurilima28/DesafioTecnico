@@ -46,7 +46,13 @@ namespace Intelectah.Models
 
         public virtual ICollection<UsuariosModel> Usuarios { get; set; }
         public virtual ICollection<VendasModel> Vendas { get; set; }  
+        public virtual ICollection<VeiculosModel> Veiculos { get; set; }
+        public virtual ICollection<FabricantesModel> Fabricantes { get; set; }
 
+        public ConcessionariasModel()
+        {
+            Veiculos = new HashSet<VeiculosModel>();
+        }
 
         public ConcessionariasModel(int concessionariaID, string nome, string enderecoCompleto, string cidade, string estado, string cep, string telefone, string email, int capacidadeMax)
         {
@@ -60,8 +66,5 @@ namespace Intelectah.Models
             Email = email;
             CapacidadeMax = capacidadeMax;
         }
-
-        public ConcessionariasModel() { }
-
     }
 }

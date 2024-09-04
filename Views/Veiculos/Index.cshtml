@@ -41,6 +41,7 @@
                     <th scope="col">Ano de fabricação</th>
                     <th scope="col">R$</th>
                     <th scope="col">Fabricante</th>
+                    <th scope="col">Concessionária</th>
                     <th scope="col">Tipo de veículo</th>
                     <th scope="col">Descrição</th>
                     <th scope="col"></th>
@@ -60,6 +61,7 @@
                             <td>
                                 @veiculo.Fabricantes.FirstOrDefault(f => f.Value == veiculo.FabricanteID.ToString())?.Text
                             </td>
+                            <td>@veiculo.NomeConcessionaria</td>
                             <td>@veiculo.Tipo</td>
                             <td>@veiculo.Descricao</td>
                             <td>

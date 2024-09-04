@@ -20,10 +20,10 @@ namespace Intelectah.Dapper
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ClientesModel>()
-                 .HasMany(c => c.Vendas)
-                 .WithOne(v => v.Cliente)
-                 .HasForeignKey(v => v.ClienteID)
-                 .OnDelete(DeleteBehavior.Restrict);
+       .HasMany(c => c.Vendas)
+       .WithOne(v => v.Cliente)
+       .HasForeignKey(v => v.ClienteID)
+       .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<VendasModel>()
                 .HasOne(v => v.Cliente)
@@ -46,15 +46,20 @@ namespace Intelectah.Dapper
             modelBuilder.Entity<ConcessionariasModel>()
                 .HasMany(c => c.Usuarios)
                 .WithOne(u => u.Concessionaria)
-                .HasForeignKey(u => u.ConcessionariaID) 
+                .HasForeignKey(u => u.ConcessionariaID)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ConcessionariasModel>()
                 .HasMany(c => c.Vendas)
-                .WithOne(v => v.Concessionaria) 
-                .HasForeignKey(v => v.ConcessionariaID) 
+                .WithOne(v => v.Concessionaria)
+                .HasForeignKey(v => v.ConcessionariaID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<ConcessionariasModel>()
+                .HasMany(c => c.Veiculos)
+                .WithOne(v => v.Concessionarias) 
+                .HasForeignKey(v => v.ConcessionariaID)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

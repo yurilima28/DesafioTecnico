@@ -120,6 +120,9 @@ namespace Intelectah.Migrations
                     b.Property<int>("AnoFundacao")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ConcessionariasModelConcessionariaID")
+                        .HasColumnType("int");
+
                     b.Property<string>("NomeFabricante")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -136,6 +139,8 @@ namespace Intelectah.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.HasKey("FabricanteID");
+
+                    b.HasIndex("ConcessionariasModelConcessionariaID");
 
                     b.ToTable("Fabricantes");
                 });
@@ -187,6 +192,9 @@ namespace Intelectah.Migrations
                     b.Property<int>("AnoFabricacao")
                         .HasColumnType("int");
 
+                    b.Property<int>("ConcessionariaID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Descricao")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -207,6 +215,8 @@ namespace Intelectah.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("VeiculoID");
+
+                    b.HasIndex("ConcessionariaID");
 
                     b.HasIndex("FabricanteID");
 
@@ -247,6 +257,13 @@ namespace Intelectah.Migrations
                     b.ToTable("Vendas");
                 });
 
+            modelBuilder.Entity("Intelectah.Models.FabricantesModel", b =>
+                {
+                    b.HasOne("Intelectah.Models.ConcessionariasModel", null)
+                        .WithMany("Fabricantes")
+                        .HasForeignKey("ConcessionariasModelConcessionariaID");
+                });
+
             modelBuilder.Entity("Intelectah.Models.UsuariosModel", b =>
                 {
                     b.HasOne("Intelectah.Models.ConcessionariasModel", "Concessionaria")
@@ -260,11 +277,19 @@ namespace Intelectah.Migrations
 
             modelBuilder.Entity("Intelectah.Models.VeiculosModel", b =>
                 {
+                    b.HasOne("Intelectah.Models.ConcessionariasModel", "Concessionarias")
+                        .WithMany("Veiculos")
+                        .HasForeignKey("ConcessionariaID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Intelectah.Models.FabricantesModel", "Fabricantes")
                         .WithMany("Veiculos")
                         .HasForeignKey("FabricanteID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Concessionarias");
 
                     b.Navigation("Fabricantes");
                 });
@@ -303,7 +328,11 @@ namespace Intelectah.Migrations
 
             modelBuilder.Entity("Intelectah.Models.ConcessionariasModel", b =>
                 {
+                    b.Navigation("Fabricantes");
+
                     b.Navigation("Usuarios");
+
+                    b.Navigation("Veiculos");
 
                     b.Navigation("Vendas");
                 });

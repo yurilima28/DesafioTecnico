@@ -11,17 +11,20 @@ namespace Intelectah.Controllers
     {
         private readonly IVeiculosRepositorio _veiculosRepositorio;
         private readonly IFabricantesRepositorio _fabricantesRepositorio;
+        private readonly IConcessionariasRepositorio _concessionariasRepositorio;
 
-        public VeiculosController(IVeiculosRepositorio veiculosRepositorio, IFabricantesRepositorio fabricantesRepositorio)
+        public VeiculosController(IVeiculosRepositorio veiculosRepositorio, IFabricantesRepositorio fabricantesRepositorio, IConcessionariasRepositorio concessionariasRepositorio)
         {
             _veiculosRepositorio = veiculosRepositorio;
             _fabricantesRepositorio = fabricantesRepositorio;
+            _concessionariasRepositorio = concessionariasRepositorio;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var veiculos = _veiculosRepositorio.BuscarTodos();
             var fabricantes = _fabricantesRepositorio.BuscarTodos().ToList();
+            var concessionarias = await _concessionariasRepositorio.ListarTodosAsync();
 
             var veiculosViewModel = veiculos.Select(v => new VeiculosViewModel
             {
@@ -32,6 +35,7 @@ namespace Intelectah.Controllers
                 FabricanteID = v.FabricanteID,
                 Tipo = v.Tipo,
                 Descricao = v.Descricao,
+                NomeConcessionaria = concessionarias.FirstOrDefault(c => c.ConcessionariaID == v.ConcessionariaID)?.Nome,
                 Fabricantes = fabricantes.Select(f => new SelectListItem
                 {
                     Value = f.FabricanteID.ToString(),
@@ -45,6 +49,8 @@ namespace Intelectah.Controllers
         public IActionResult Criar()
         {
             var fabricantes = _fabricantesRepositorio.BuscarTodos();
+            var concessionarias = _veiculosRepositorio.ObterConcessionarias();
+
             var viewModel = new VeiculosViewModel
             {
                 Fabricantes = fabricantes.Select(f => new SelectListItem
@@ -52,20 +58,33 @@ namespace Intelectah.Controllers
                     Value = f.FabricanteID.ToString(),
                     Text = f.NomeFabricante
                 }).ToList(),
+                Concessionarias = concessionarias.Select(c => new SelectListItem
+                {
+                    Value = c.ConcessionariaID.ToString(),
+                    Text = c.Nome
+                }).ToList(),
                 TiposVeiculos = Enum.GetValues(typeof(TipoVeiculo))
-                    .Cast<TipoVeiculo>()
-                    .Select(t => new SelectListItem
-                    {
-                        Value = t.ToString(),
-                        Text = t.ToString()
-                    })
-                    .ToList()
-            };
+               .Cast<TipoVeiculo>()
+               .Select(t => new SelectListItem
+               {
+                   Value = t.ToString(),
+                   Text = t.ToString()
+               })
+               .ToList()
+                };
             return View(viewModel);
         }
         public IActionResult Editar(int id)
         {
             var veiculo = _veiculosRepositorio.ListarPorId(id);
+            if (veiculo == null)
+            {
+                return NotFound();
+            }
+
+            var fabricantes = _fabricantesRepositorio.BuscarTodos();
+            var concessionarias = _veiculosRepositorio.ObterConcessionarias();
+
             var viewModel = new VeiculosViewModel
             {
                 VeiculoID = veiculo.VeiculoID,
@@ -73,18 +92,30 @@ namespace Intelectah.Controllers
                 AnoFabricacao = veiculo.AnoFabricacao,
                 ValorVeiculo = veiculo.ValorVeiculo,
                 FabricanteID = veiculo.FabricanteID,
+                ConcessionariaID = veiculo.ConcessionariaID,
                 Tipo = veiculo.Tipo,
                 Descricao = veiculo.Descricao,
-                Fabricantes = _fabricantesRepositorio.BuscarTodos().Select(f => new SelectListItem
+
+                Fabricantes = fabricantes.Select(f => new SelectListItem
                 {
                     Value = f.FabricanteID.ToString(),
                     Text = f.NomeFabricante
-                }),
-                TiposVeiculos = Enum.GetValues(typeof(TipoVeiculo)).Cast<TipoVeiculo>().Select(t => new SelectListItem
+                }).ToList(),
+
+                Concessionarias = concessionarias.Select(c => new SelectListItem
                 {
-                    Value = t.ToString(),
-                    Text = t.ToString()
-                })
+                    Value = c.ConcessionariaID.ToString(),
+                    Text = c.Nome
+                }).ToList(),
+
+                TiposVeiculos = Enum.GetValues(typeof(TipoVeiculo))
+                    .Cast<TipoVeiculo>()
+                    .Select(t => new SelectListItem
+                    {
+                        Value = ((int)t).ToString(),
+                        Text = t.ToString()
+                    })
+                    .ToList()
             };
 
             return View(viewModel);
@@ -185,8 +216,9 @@ namespace Intelectah.Controllers
                     AnoFabricacao = viewModel.AnoFabricacao,
                     ValorVeiculo = viewModel.ValorVeiculo,
                     FabricanteID = viewModel.FabricanteID,
+                    ConcessionariaID = viewModel.ConcessionariaID,
                     Tipo = viewModel.Tipo,
-                    Descricao = viewModel.Descricao
+                    Descricao = viewModel.Descricao,
                 };
 
                 _veiculosRepositorio.Atualizar(veiculo);
@@ -195,10 +227,18 @@ namespace Intelectah.Controllers
             }
 
             var fabricantes = _fabricantesRepositorio.BuscarTodos();
+            var concessionarias = _veiculosRepositorio.ObterConcessionarias();
+
             viewModel.Fabricantes = fabricantes.Select(f => new SelectListItem
             {
                 Value = f.FabricanteID.ToString(),
                 Text = f.NomeFabricante
+            }).ToList();
+
+            viewModel.Concessionarias = concessionarias.Select(c => new SelectListItem
+            {
+                Value = c.ConcessionariaID.ToString(),
+                Text = c.Nome
             }).ToList();
 
             viewModel.TiposVeiculos = Enum.GetValues(typeof(TipoVeiculo))

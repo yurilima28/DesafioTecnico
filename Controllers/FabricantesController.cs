@@ -1,9 +1,11 @@
-﻿using Intelectah.Models;
+﻿using Intelectah.Dapper;
+using Intelectah.Models;
 using Intelectah.Repositorio;
 using Intelectah.Services;
 using Intelectah.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Diagnostics.Metrics;
 using static Intelectah.Services.CountryService;
@@ -13,12 +15,14 @@ namespace Intelectah.Controllers
     public class FabricantesController : Controller
     {
         private readonly IFabricantesRepositorio _fabricantesRepositorio;
+        private readonly BancoContext _bancoContext;
         private readonly CountryService _countryService;
 
-        public FabricantesController(IFabricantesRepositorio fabricantesRepositorio, CountryService countryService)
+        public FabricantesController(IFabricantesRepositorio fabricantesRepositorio, CountryService countryService, BancoContext bancoContext)
         {
             _fabricantesRepositorio = fabricantesRepositorio;
             _countryService = countryService;
+            _bancoContext = bancoContext;
         }
         private static readonly Dictionary<string, string> CountryTranslations = new Dictionary<string, string>
         {
@@ -74,17 +78,14 @@ namespace Intelectah.Controllers
             };
             return View(viewModel);
         }
-        public async Task<IActionResult> Editar(int Id)
-        {
-            FabricantesModel fabricante = _fabricantesRepositorio.ListarPorId(Id);
 
+        public  IActionResult Editar(int Id)
+        {
+            var fabricante = _fabricantesRepositorio.ListarPorId(Id);
             if (fabricante == null)
             {
-                TempData["MensagemErro"] = "Fabricante não encontrado.";
-                return RedirectToAction("Index");
+                return NotFound();
             }
-
-            var opcaoPaises = await GetListaPaisesAsync();
 
             var viewModel = new FabricantesViewModel
             {
@@ -93,11 +94,12 @@ namespace Intelectah.Controllers
                 PaisOrigem = fabricante.PaisOrigem,
                 AnoFundacao = fabricante.AnoFundacao,
                 URL = fabricante.URL,
-                OpcaoPaises = opcaoPaises
+                OpcaoPaises = GetListaPaisesAsync().Result 
             };
 
             return View(viewModel);
         }
+
 
         public async Task<IActionResult> ApagarConfirmacao(int Id)
         {
@@ -167,11 +169,11 @@ namespace Intelectah.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Alterar(FabricantesViewModel viewModel)
+        public async Task<IActionResult> Editar(FabricantesViewModel viewModel)
         {
-            try
+            if (ModelState.IsValid)
             {
-                if (ModelState.IsValid)
+                try
                 {
                     var fabricante = new FabricantesModel
                     {
@@ -179,20 +181,22 @@ namespace Intelectah.Controllers
                         NomeFabricante = viewModel.NomeFabricante,
                         PaisOrigem = viewModel.PaisOrigem,
                         AnoFundacao = viewModel.AnoFundacao,
-                        URL = viewModel.URL,
+                        URL = viewModel.URL
                     };
 
                     _fabricantesRepositorio.Atualizar(fabricante);
+
                     TempData["MensagemSucesso"] = "Fabricante alterado com sucesso";
                     return RedirectToAction("Index");
                 }
-                return View("Editar", viewModel);
+                catch (Exception ex)
+                {
+                    TempData["MensagemErro"] = $"Erro ao atualizar o fabricante: {ex.Message}";
+                }
             }
-            catch (Exception erro)
-            {
-                TempData["MensagemErro"] = $"Não foi possível alterar o fabricante, tente novamente. Detalhe do erro: {erro.Message}";
-                return RedirectToAction("Index");
-            }
+
+            viewModel.OpcaoPaises = await GetListaPaisesAsync();
+            return View(viewModel);
         }
 
     }

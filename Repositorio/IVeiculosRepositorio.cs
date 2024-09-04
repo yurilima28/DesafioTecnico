@@ -10,5 +10,6 @@ namespace Intelectah.Repositorio
         VeiculosModel Atualizar (VeiculosModel veiculo);    
         bool Apagar (int Id);
         List<VeiculosModel> BuscarPorFabricante(int fabricanteId);
+        IEnumerable<ConcessionariasModel> ObterConcessionarias();
     }
 }

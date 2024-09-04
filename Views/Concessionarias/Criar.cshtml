@@ -5,6 +5,14 @@
     ViewData["FormAction"] = "Criar";
 }
 
-<h1> Criar concessionária</h1>
+<h1>Criar Concessionária</h1>
 
-@Html.Partial("Forms", Model)
+<form asp-action="@ViewData["FormAction"]" method="post">
+    @Html.AntiForgeryToken()
+    @Html.Partial("Forms", Model)
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Salvar</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>

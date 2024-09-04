@@ -18,9 +18,9 @@ namespace Intelectah.Repositorio
             return await _bancoContext.Concessionarias.ToListAsync();
         }
 
-        public async Task<ConcessionariasModel> ListarPorIdAsync(int id)
+        public async Task<ConcessionariasModel> ListarPorIdAsync(int Id)
         {
-            return await _bancoContext.Concessionarias.FindAsync(id);
+            return await _bancoContext.Concessionarias.FindAsync(Id);
         }
 
         public async Task AdicionarAsync(ConcessionariasModel concessionaria)
@@ -35,20 +35,26 @@ namespace Intelectah.Repositorio
             await _bancoContext.SaveChangesAsync();
         }
 
-        public async Task RemoverAsync(int id)
+        public bool Apagar(int Id)
         {
-            var concessionaria = await _bancoContext.Concessionarias.FindAsync(id);
-            if (concessionaria != null)
+            var concessionaria = _bancoContext.Concessionarias.Find(Id);
+            if (concessionaria == null)
             {
-                _bancoContext.Concessionarias.Remove(concessionaria);
-                await _bancoContext.SaveChangesAsync();
+                return false;
             }
+
+            _bancoContext.Concessionarias.Remove(concessionaria);
+            _bancoContext.SaveChanges();
+            return true;
         }
 
-        public ConcessionariasModel ObterPorNome(string nomeConcessonaria)
+        public ConcessionariasModel ObterPorNome(string nomeConcessionaria)
         {
+            var nomeLower = nomeConcessionaria.ToLower();
             return _bancoContext.Concessionarias
-            .FirstOrDefault(f => f.Nome.ToLower() == nomeConcessonaria.ToLower());
+                .FirstOrDefault(c => c.Nome.ToLower() == nomeLower);
         }
+
+
     }
 }

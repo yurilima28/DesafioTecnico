@@ -52,18 +52,6 @@ namespace Intelectah.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> Apagar(int Id)
-        {
-            var concessionaria = _concessionariasRepositorio.ListarPorIdAsync(Id);
-            if (concessionaria == null)
-            {
-                return NotFound();
-            }
-
-            await _concessionariasRepositorio.RemoverAsync(Id);
-            return RedirectToAction("Index");
-        }
-
         public async Task<IActionResult> ApagarConfirmacao(int Id)
         {
             var concessionaria = await _concessionariasRepositorio.ListarPorIdAsync(Id);
@@ -119,9 +107,10 @@ namespace Intelectah.Controllers
                 CapacidadeMax = concessionaria.CapacidadeMax
             };
 
-            ViewData["FormAction"] = "Alterar";
+            ViewData["FormAction"] = "Editar";
             return View(viewModel);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Criar(ConcessionariasViewModel viewModel)
@@ -147,6 +136,29 @@ namespace Intelectah.Controllers
             return View(viewModel);
         }
 
+        [HttpPost]
+        public IActionResult Apagar(int Id)
+        {
+            try
+            {
+                bool apagado = _concessionariasRepositorio.Apagar(Id);
+                if (apagado)
+                {
+                    TempData["MensagemSucesso"] = "Concessionária deletada com sucesso.";
+                }
+                else
+                {
+                    TempData["MensagemErro"] = "Não foi possível deletar a concessionária.";
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception erro)
+            {
+                TempData["MensagemErro"] = $"Não foi possível deletar a concessionária, tente novamente. Detalhe do erro: {erro.Message}";
+                return RedirectToAction("Index");
+            }
+        }
+    
         [HttpPost]
         public async Task<IActionResult> Editar(ConcessionariasViewModel viewModel)
         {

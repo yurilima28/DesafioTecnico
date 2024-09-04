@@ -19,7 +19,7 @@ namespace Intelectah.Repositorio
         {
             return _bancoContext.Fabricantes.ToList();
         }
-     
+
         public FabricantesModel Adicionar(FabricantesModel fabricante)
         {
             _bancoContext.Fabricantes.Add(fabricante);
@@ -38,16 +38,16 @@ namespace Intelectah.Repositorio
             FabricantesModel fabricanteDB = ListarPorId(fabricante.FabricanteID);
 
             if (fabricanteDB == null) throw new Exception("Houve um erro ao atualizar o fabricante");
-            {
-                fabricanteDB.NomeFabricante = fabricante.NomeFabricante;
-                fabricanteDB.PaisOrigem = fabricante.PaisOrigem;
-                fabricanteDB.AnoFundacao = fabricante.AnoFundacao;
-                fabricanteDB.URL = fabricante.URL;
 
-                _bancoContext.Fabricantes.Update(fabricanteDB);
-                _bancoContext.SaveChanges();
-                return fabricanteDB;
-            }
+            fabricanteDB.NomeFabricante = fabricante.NomeFabricante;
+            fabricanteDB.PaisOrigem = fabricante.PaisOrigem;
+            fabricanteDB.AnoFundacao = fabricante.AnoFundacao;
+            fabricanteDB.URL = fabricante.URL;
+
+            _bancoContext.Fabricantes.Update(fabricanteDB);
+            _bancoContext.SaveChanges();
+            return fabricanteDB;
+
         }
 
         public bool Apagar(int Id)
@@ -65,6 +65,6 @@ namespace Intelectah.Repositorio
         {
             return _bancoContext.Fabricantes
         .FirstOrDefault(f => f.NomeFabricante.ToLower() == nomeFabricante.ToLower());
-        }        
+        }
     }
 }

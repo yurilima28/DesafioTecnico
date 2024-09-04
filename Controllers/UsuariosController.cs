@@ -27,7 +27,7 @@ namespace Intelectah.Controllers
         public async Task<IActionResult> Criar()
         {
             var concessionarias = await _concessionariasRepositorio.ListarTodosAsync();
-            ViewBag.Concessionarias = concessionarias.Select(c => new SelectListItem
+            ViewBag.Concessionarias = concessionarias?.Select(c => new SelectListItem
             {
                 Value = c.ConcessionariaID.ToString(),
                 Text = c.Nome
@@ -46,7 +46,8 @@ namespace Intelectah.Controllers
                     NomeUsuario = usuarioViewModel.NomeUsuario,
                     Senha = usuarioViewModel.Senha,
                     Email = usuarioViewModel.Email,
-                    NivelAcesso = usuarioViewModel.NivelAcesso
+                    NivelAcesso = usuarioViewModel.NivelAcesso,
+                    ConcessionariaID = usuarioViewModel.ConcessionariaID
                 };
 
                 await _usuariosRepositorio.AdicionarUsuarioAsync(usuario);

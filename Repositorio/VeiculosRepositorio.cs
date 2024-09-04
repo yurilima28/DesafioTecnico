@@ -61,6 +61,10 @@ namespace Intelectah.Repositorio
             return true;
         }
 
+        public IEnumerable<ConcessionariasModel> ObterConcessionarias()
+        {
+            return _bancoContext.Concessionarias.ToList();
+        }
 
     }
 }
