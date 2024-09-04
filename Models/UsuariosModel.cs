@@ -24,8 +24,6 @@ namespace Intelectah.Models
 
         [Required(ErrorMessage = "O nível de acesso é obrigatório.")]
         public PerfilEnum NivelAcesso { get; set; }
-        public int ConcessionariaID { get; set; }
-        public virtual ConcessionariasModel Concessionaria { get; set; }
 
         public UsuariosModel() { }
 

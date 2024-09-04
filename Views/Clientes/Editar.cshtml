@@ -1,5 +1,5 @@
-﻿@using Intelectah.Models
-@model Intelectah.Models.ClientesModel
+﻿@model Intelectah.ViewModel.ClientesViewModel
+
 
 @{
     ViewData["Title"] = "Editar Cliente";
@@ -9,7 +9,7 @@
     <h1 class="display-4">Editar Cliente</h1>
 </div>
 
-<form asp-controller="Clientes" asp-action="Alterar" method="post">
+<form asp-controller="Clientes" asp-action="Editar" method="post">
     <input type="hidden" asp-for="ClienteID" />
     @Html.Partial("Forms.cshtml")
 

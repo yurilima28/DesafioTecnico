@@ -47,7 +47,6 @@ namespace Intelectah.Controllers
                     Senha = usuarioViewModel.Senha,
                     Email = usuarioViewModel.Email,
                     NivelAcesso = usuarioViewModel.NivelAcesso,
-                    ConcessionariaID = usuarioViewModel.ConcessionariaID
                 };
 
                 await _usuariosRepositorio.AdicionarUsuarioAsync(usuario);
@@ -71,7 +70,6 @@ namespace Intelectah.Controllers
                 Senha = usuario.Senha,
                 Email = usuario.Email,
                 NivelAcesso = usuario.NivelAcesso,
-                ConcessionariaID = usuario.ConcessionariaID
             };
 
             return View(usuarioViewModel);
@@ -118,22 +116,46 @@ namespace Intelectah.Controllers
             return View(usuarioViewModel);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Apagar(int id)
         {
-            var usuario = await _usuariosRepositorio.ObterUsuarioPorIdAsync(id);
-            if (usuario == null)
+            try
             {
-                return NotFound();
+                bool apagado = await _usuariosRepositorio.ApagarAsync(id);
+                if (apagado)
+                {
+                    TempData["MensagemSucesso"] = "Usuário excluído com sucesso";
+                }
+                else
+                {
+                    TempData["MensagemErro"] = "Não foi possível encontrar o usuário para exclusão.";
+                }
+                return RedirectToAction("Index");
             }
-
-            return View(usuario);
+            catch (Exception ex)
+            {
+                TempData["MensagemErro"] = $"Não foi possível excluir o usuário. Detalhe do erro: {ex.Message}";
+                return RedirectToAction("Index");
+            }
         }
 
-        [HttpPost, ActionName("Apagar")]
         public async Task<IActionResult> ApagarConfirmacao(int id)
         {
-            await _usuariosRepositorio.RemoverUsuarioAsync(id);
-            return RedirectToAction(nameof(Index));
+            var usuario = await _usuariosRepositorio.ListarPorIdAsync(id);
+            if (usuario == null)
+            {
+                TempData["MensagemErro"] = "Usuário não encontrado.";
+                return RedirectToAction("Index");
+            }
+
+            var viewModel = new UsuariosViewModel
+            {
+                UsuarioId = usuario.UsuarioID,
+                NomeUsuario = usuario.NomeUsuario,
+                Email = usuario.Email,
+            };
+
+            return View(viewModel);
         }
     }
 }

@@ -1,1 +1,10 @@
-﻿
+﻿@model Intelectah.ViewModel.VendasViewModel
+
+@{
+    ViewData["Title"] = "Criar Venda";
+    ViewData["FormAction"] = "Criar";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@await Html.PartialAsync("Forms", Model)

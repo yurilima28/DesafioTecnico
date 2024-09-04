@@ -10,5 +10,8 @@ namespace Intelectah.Repositorio
         Task<UsuariosModel> ObterUsuarioPorIdAsync(int usuarioId);
         Task<IEnumerable<UsuariosModel>> ObterTodosUsuariosAsync();
         Task<bool> UsuarioExisteAsync(string nomeUsuario);
+        Task<bool> ApagarAsync(int Id);
+        Task<UsuariosModel> ListarPorIdAsync(int id);
+
     }
 }

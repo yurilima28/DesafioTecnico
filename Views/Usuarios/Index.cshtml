@@ -2,9 +2,9 @@
 @using Microsoft.AspNetCore.Identity
 @using Intelectah.Enums
 
-@* @{
+@{
     var isGerente = User.IsInRole(PerfilEnum.Gerente.ToString());
-} *@
+}
 
 <div class="text-center">
     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
@@ -20,7 +20,6 @@
                     <th scope="col">Nome de Usuário</th>
                     <th scope="col">Email</th>
                     <th scope="col">Cargo</th>
-                    <th scope="col">Concessonária</th>
                     <th scope="col"></th>
                 </tr>
             </thead>
@@ -34,11 +33,10 @@
                             <td>@usuario.NomeUsuario</td>
                             <td>@usuario.Email</td>
                             <td>@usuario.NivelAcesso</td>
-                            <td>@usuario.Concessionaria</td>
                             <td>
                                 <div class="btn-group" role="group">
                                     <a role="button" class="btn btn-primary" asp-route-id="@usuario.UsuarioID" asp-controller="Usuarios" asp-action="Editar">Editar</a>
-                                    <a role="button" class="btn btn-danger" asp-route-id="@usuario.UsuarioID" asp-controller="Usuarios" asp-action="Apagar">Apagar</a>
+                                    <a role="button" class="btn btn-danger" asp-route-id="@usuario.UsuarioID" asp-controller="Usuarios" asp-action="ApagarConfirmacao">Apagar</a>
                                 </div>
                             </td>
                         </tr>
@@ -48,9 +46,6 @@
             </tbody>
         </table>
     </form>
-
-
-
 
 @section Scripts {
     <script>

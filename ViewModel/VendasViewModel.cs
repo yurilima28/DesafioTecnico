@@ -38,16 +38,25 @@ namespace Intelectah.ViewModel
 
         [Display(Name = "Nome da Concessionária")]
         public string NomeConcessionaria { get; set; }
+
+        [Required(ErrorMessage = "A fabricante é obrigatória.")]
+        [Display(Name = "Fabricante")]
+        public int FabricanteID { get; set; }
+
+        [Required(ErrorMessage = "O modelo é obrigatório.")]
+        [Display(Name = "Veiculo")]
+        public int VeiculoID { get; set; }
         
         public virtual ICollection<UsuariosModel> Usuarios { get; set; }
         public virtual ICollection<VeiculosModel> Veiculos { get; set; }
         public virtual ICollection<ConcessionariasModel> Concessionarias { get; set; }
+        public virtual ICollection<FabricantesModel> Fabricantes { get; set; }
 
         public VendasViewModel()
         {
         }
 
-        public VendasViewModel(int vendaId, int clienteId, DateTime dataVenda, decimal valorTotal, int usuarioId, string nomeCliente, string nomeUsuario, string nomeConcessionaria)
+        public VendasViewModel(int vendaId, int clienteId, DateTime dataVenda, decimal valorTotal, int usuarioId, string nomeCliente, string nomeUsuario, string nomeConcessionaria, int fabricanteId)
         {
             VendaId = vendaId;
             ClienteID = clienteId;
@@ -57,6 +66,7 @@ namespace Intelectah.ViewModel
             NomeCliente = nomeCliente;
             NomeUsuario = nomeUsuario;
             NomeConcessionaria = nomeConcessionaria;
+            FabricanteID = fabricanteId;
         }
     }
 }

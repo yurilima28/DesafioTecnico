@@ -153,7 +153,7 @@ namespace Intelectah.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UsuarioID"), 1L, 1);
 
-                    b.Property<int>("ConcessionariaID")
+                    b.Property<int?>("ConcessionariasModelConcessionariaID")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -176,7 +176,7 @@ namespace Intelectah.Migrations
 
                     b.HasKey("UsuarioID");
 
-                    b.HasIndex("ConcessionariaID");
+                    b.HasIndex("ConcessionariasModelConcessionariaID");
 
                     b.ToTable("Usuarios");
                 });
@@ -266,13 +266,9 @@ namespace Intelectah.Migrations
 
             modelBuilder.Entity("Intelectah.Models.UsuariosModel", b =>
                 {
-                    b.HasOne("Intelectah.Models.ConcessionariasModel", "Concessionaria")
+                    b.HasOne("Intelectah.Models.ConcessionariasModel", null)
                         .WithMany("Usuarios")
-                        .HasForeignKey("ConcessionariaID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Concessionaria");
+                        .HasForeignKey("ConcessionariasModelConcessionariaID");
                 });
 
             modelBuilder.Entity("Intelectah.Models.VeiculosModel", b =>

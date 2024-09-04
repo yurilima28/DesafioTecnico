@@ -33,6 +33,11 @@ namespace Intelectah.Repositorio
             await _bancoContext.SaveChangesAsync();
         }
 
+        public async Task<UsuariosModel> ListarPorIdAsync(int id)
+        {
+            return await _bancoContext.Usuarios.FindAsync(id);
+        }
+
         public async Task RemoverUsuarioAsync(int usuarioId)
         {
             var usuario = await _bancoContext.Usuarios.FindAsync(usuarioId);
@@ -56,6 +61,16 @@ namespace Intelectah.Repositorio
         public async Task<bool> UsuarioExisteAsync(string nomeUsuario)
         {
             return await _bancoContext.Usuarios.AnyAsync(u => u.NomeUsuario == nomeUsuario);
+        }
+
+        public async Task<bool> ApagarAsync(int id)
+        {
+            var usuario = await ListarPorIdAsync(id); 
+            if (usuario == null) return false;
+
+            _bancoContext.Usuarios.Remove(usuario);
+            await _bancoContext.SaveChangesAsync();
+            return true;
         }
     }
 }

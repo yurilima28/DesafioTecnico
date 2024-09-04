@@ -24,19 +24,25 @@ namespace Intelectah.Models
 
         public int UsuarioID { get; set; }
         public int ConcessionariaID { get; set; }
+        public int FabricanteID { get; set; }
+        public int VeiculoID { get; set; }
 
         public virtual UsuariosModel Usuario { get; set; }
         public virtual ClientesModel Cliente { get; set; }
         public virtual ConcessionariasModel Concessionaria { get; set; }
+        public virtual VeiculosModel Veiculo { get; set; }
+        public virtual FabricantesModel Fabricantes { get; set; }
         public VendasModel() { }
 
-        public VendasModel(int clienteID, decimal valorTotal, DateTime dataVenda, int usuarioID, int concessionarID)
+        public VendasModel(int clienteID, decimal valorTotal, DateTime dataVenda, int usuarioID, int concessionarID, int fabricanteID, int veiculoID)
         {
             ClienteID = clienteID;
             ValorTotal = valorTotal;
             DataVenda = dataVenda;
             UsuarioID = usuarioID;
             ConcessionariaID = concessionarID;
+            FabricanteID = fabricanteID;
+            VeiculoID = veiculoID;
         }
     }
 }

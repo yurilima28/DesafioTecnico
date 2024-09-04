@@ -44,12 +44,6 @@ namespace Intelectah.Dapper
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ConcessionariasModel>()
-                .HasMany(c => c.Usuarios)
-                .WithOne(u => u.Concessionaria)
-                .HasForeignKey(u => u.ConcessionariaID)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<ConcessionariasModel>()
                 .HasMany(c => c.Vendas)
                 .WithOne(v => v.Concessionaria)
                 .HasForeignKey(v => v.ConcessionariaID)

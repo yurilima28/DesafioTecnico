@@ -76,7 +76,27 @@ namespace Intelectah.Controllers
                 Telefone = cliente.Telefone,
             };
 
-            ViewData["FormAction"] = "Alterar";
+            return View("Editar", viewModel);
+        }
+   
+
+        public async Task<IActionResult> ApagarConfirmacao(int id)
+        {
+            var cliente = _clientesRepositorio.ListarPorId(id);
+            if (cliente == null)
+            {
+                TempData["MensagemErro"] = "Cliente não encontrado.";
+                return RedirectToAction("Index");
+            }
+
+            var viewModel = new ClientesModel
+            {
+                ClienteID = cliente.ClienteID,
+                Nome = cliente.Nome,
+                Email = cliente.Email,
+                Telefone = cliente.Telefone
+            };
+
             return View(viewModel);
         }
 
@@ -100,38 +120,28 @@ namespace Intelectah.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> Apagar(int id)
+        [HttpPost]
+        public IActionResult Apagar(int id)
         {
-            var cliente = _clientesRepositorio.ListarPorId(id);
-            if (cliente == null)
+            try
             {
-                TempData["MensagemErro"] = "Cliente não encontrado.";
+                bool apagado = _clientesRepositorio.Apagar(id);
+                if (apagado)
+                {
+                    TempData["MensagemSucesso"] = "Cliente deletado com sucesso.";
+                }
+                else
+                {
+                    TempData["MensagemErro"] = "Cliente não encontrado ou não foi possível deletar o cliente.";
+                }
                 return RedirectToAction("Index");
             }
-
-             _clientesRepositorio.Apagar(id);
-            return RedirectToAction("Index");
-        }
-
-        public async Task<IActionResult> ApagarConfirmacao(int id)
-        {
-            var cliente = _clientesRepositorio.ListarPorId(id);
-            if (cliente == null)
+            catch (Exception erro)
             {
-                TempData["MensagemErro"] = "Cliente não encontrado.";
+                TempData["MensagemErro"] = $"Não foi possível deletar o cliente. Detalhe do erro: {erro.Message}";
                 return RedirectToAction("Index");
             }
-
-            var viewModel = new ClientesViewModel
-            {
-                ClienteID = cliente.ClienteID,
-                Nome = cliente.Nome,
-                Email = cliente.Email,
-                Telefone = cliente.Telefone,
-            };
-
-            return View(viewModel);
-        }
+        }     
 
     }
 }
