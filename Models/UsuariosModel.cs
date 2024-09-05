@@ -9,6 +9,13 @@ namespace Intelectah.Models
         [Key]
         public int UsuarioID { get; set; }
 
+        public string Login { get; set; }
+        public bool SenhaValida(string senha)
+        {
+            return Senha  == senha;
+
+        }
+
         [Required(ErrorMessage = "O nome de usuário é obrigatório.")]
         [MaxLength(50, ErrorMessage = "O nome de usuário não pode exceder 50 caracteres.")]
         public string NomeUsuario { get; set; }
@@ -27,12 +34,13 @@ namespace Intelectah.Models
 
         public UsuariosModel() { }
 
-        public UsuariosModel(string nomeUsuario, string senha, string email, PerfilEnum nivelAcesso)
+        public UsuariosModel(string nomeUsuario, string senha, string email, PerfilEnum nivelAcesso, string login)
         {
             NomeUsuario = nomeUsuario;
             Senha = senha;
             Email = email;
             NivelAcesso = nivelAcesso;
+            Login = login;
         }
 
     }

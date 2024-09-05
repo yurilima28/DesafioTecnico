@@ -10,12 +10,10 @@ namespace Intelectah.Controllers
     public class UsuariosController : Controller
     {
         private readonly IUsuariosRepositorio _usuariosRepositorio;
-        private readonly IConcessionariasRepositorio _concessionariasRepositorio;
 
-        public UsuariosController(IUsuariosRepositorio usuariosRepositorio, IConcessionariasRepositorio concessionariasRepositorio)
+        public UsuariosController(IUsuariosRepositorio usuariosRepositorio)
         {
             _usuariosRepositorio = usuariosRepositorio;
-            _concessionariasRepositorio = concessionariasRepositorio;
         }
 
         public async Task<IActionResult> Index()
@@ -26,13 +24,7 @@ namespace Intelectah.Controllers
 
         public async Task<IActionResult> Criar()
         {
-            var concessionarias = await _concessionariasRepositorio.ListarTodosAsync();
-            ViewBag.Concessionarias = concessionarias?.Select(c => new SelectListItem
-            {
-                Value = c.ConcessionariaID.ToString(),
-                Text = c.Nome
-            }).ToList();
-
+        
             return View(new UsuariosViewModel());
         }
 
@@ -44,6 +36,7 @@ namespace Intelectah.Controllers
                 var usuario = new UsuariosModel
                 {
                     NomeUsuario = usuarioViewModel.NomeUsuario,
+                    Login = usuarioViewModel.Login,
                     Senha = usuarioViewModel.Senha,
                     Email = usuarioViewModel.Email,
                     NivelAcesso = usuarioViewModel.NivelAcesso,

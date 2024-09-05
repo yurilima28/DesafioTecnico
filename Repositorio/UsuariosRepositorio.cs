@@ -11,6 +11,11 @@ namespace Intelectah.Repositorio
         {
             _bancoContext = bancoContext;
         }
+        public UsuariosModel BuscarPorLogin(string login)
+        {
+            return _bancoContext.Usuarios.FirstOrDefault(x => x.Login.ToUpper() == login.ToUpper());
+        }
+
         public async Task AdicionarUsuarioAsync(UsuariosModel usuario)
         {
             if (usuario == null)
@@ -72,5 +77,7 @@ namespace Intelectah.Repositorio
             await _bancoContext.SaveChangesAsync();
             return true;
         }
+
+       
     }
 }

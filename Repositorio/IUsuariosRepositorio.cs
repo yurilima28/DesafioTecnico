@@ -4,6 +4,7 @@ namespace Intelectah.Repositorio
 {
     public interface IUsuariosRepositorio
     {
+        UsuariosModel BuscarPorLogin(string login);
         Task AdicionarUsuarioAsync(UsuariosModel usuario);
         Task AtualizarUsuarioAsync(UsuariosModel usuario);
         Task RemoverUsuarioAsync(int usuarioId);
