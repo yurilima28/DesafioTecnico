@@ -12,12 +12,11 @@ namespace Intelectah.ViewModel
         public TipoVeiculo Tipo { get; set; }
         public string Descricao { get; set; }
         public int FabricanteID { get; set; }
-        public int ConcessionariaID { get; set; }
+        public bool FoiVendido { get; set; }
         public IEnumerable<SelectListItem> Fabricantes { get; set; }
         public IEnumerable<SelectListItem> TiposVeiculos { get; set; }
-        public IEnumerable<SelectListItem> Concessionarias { get; set; }
 
-        public VeiculosViewModel(int veiculoID, string modeloVeiculo, int anoFabricacao, decimal valorVeiculo, TipoVeiculo tipo, string descricao, int fabricanteID, string nomeConcessionaria)
+        public VeiculosViewModel(int veiculoID, string modeloVeiculo, int anoFabricacao, decimal valorVeiculo, TipoVeiculo tipo, string descricao, int fabricanteID, bool foiVendido)
         {
             VeiculoID = veiculoID;
             ModeloVeiculo = modeloVeiculo;
@@ -26,16 +25,16 @@ namespace Intelectah.ViewModel
             Tipo = tipo;
             Descricao = descricao;
             FabricanteID = fabricanteID;
+            FoiVendido = foiVendido;
         }
 
         public VeiculosViewModel()
         {
             Fabricantes = new List<SelectListItem>();
             TiposVeiculos = new List<SelectListItem>();
-            Concessionarias = new List<SelectListItem>();
 
         }
-        public VeiculosViewModel(int veiculoID, string modeloVeiculo, int anoFabricacao, decimal valorVeiculo, TipoVeiculo tipo, string descricao, int fabricanteID, IEnumerable<SelectListItem> fabricantes, IEnumerable<SelectListItem> tiposVeiculos, IEnumerable<SelectListItem> concessionarias)
+        public VeiculosViewModel(int veiculoID, string modeloVeiculo, int anoFabricacao, decimal valorVeiculo, TipoVeiculo tipo, string descricao, int fabricanteID, IEnumerable<SelectListItem> fabricantes, IEnumerable<SelectListItem> tiposVeiculos)
         {
             VeiculoID = veiculoID;
             ModeloVeiculo = modeloVeiculo;
@@ -46,7 +45,6 @@ namespace Intelectah.ViewModel
             FabricanteID = fabricanteID;
             Fabricantes = fabricantes;
             TiposVeiculos = tiposVeiculos;
-            Concessionarias = concessionarias;
 
         }
     }

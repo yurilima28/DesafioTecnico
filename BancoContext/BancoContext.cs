@@ -19,11 +19,19 @@ namespace Intelectah.Dapper
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<VeiculosModel>()
+                .Property(v => v.ValorVeiculo)
+                .HasColumnType("decimal(18, 2)");  
+
+            modelBuilder.Entity<VendasModel>()
+                .Property(v => v.ValorTotal)
+                .HasColumnType("decimal(18, 2)"); 
+
             modelBuilder.Entity<ClientesModel>()
-                 .HasMany(c => c.Vendas)
-                 .WithOne(v => v.Cliente)
-                 .HasForeignKey(v => v.ClienteID)
-                 .OnDelete(DeleteBehavior.Restrict);
+                .HasMany(c => c.Vendas)
+                .WithOne(v => v.Cliente)
+                .HasForeignKey(v => v.ClienteID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<VendasModel>()
                 .HasOne(v => v.Cliente)

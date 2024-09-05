@@ -19,7 +19,7 @@ namespace Intelectah.Models
 
         [Required]
         [EmailAddress(ErrorMessage = "O e-mail informado não é válido.")]
-        [StringLength(100, ErrorMessage = "O e-mail deve ter no máximo 100 caracteres.")]
+        [MaxLength(100, ErrorMessage = "O e-mail deve ter no máximo 100 caracteres.")]
         public string Email { get; set; }
 
         [Required]

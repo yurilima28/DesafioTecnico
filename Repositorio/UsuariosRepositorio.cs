@@ -13,71 +13,56 @@ namespace Intelectah.Repositorio
         }
         public UsuariosModel BuscarPorLogin(string login)
         {
-            return _bancoContext.Usuarios.FirstOrDefault(x => x.Login.ToUpper() == login.ToUpper());
+            return _bancoContext.Usuarios.FirstOrDefault(u => u.Login == login);
         }
-
-        public async Task AdicionarUsuarioAsync(UsuariosModel usuario)
+        public UsuariosModel ListarPorId(int id)
         {
-            if (usuario == null)
-                throw new ArgumentNullException(nameof(usuario));
-
+            return _bancoContext.Usuarios.Find(id);
+        }
+        public UsuariosModel AdicionarUsuario(UsuariosModel usuario)
+        {
             _bancoContext.Usuarios.Add(usuario);
-            await _bancoContext.SaveChangesAsync();
+            _bancoContext.SaveChanges();
+            return usuario;
         }
-
-        public async Task AtualizarUsuarioAsync(UsuariosModel usuario)
+        public UsuariosModel AtualizarUsuario(UsuariosModel usuario)
         {
-            if (usuario == null)
-                throw new ArgumentNullException(nameof(usuario));
-
-            var usuarioExistente = await _bancoContext.Usuarios.FindAsync(usuario.UsuarioID);
-            if (usuarioExistente == null)
-                throw new KeyNotFoundException("Usuário não encontrado.");
-
-            _bancoContext.Entry(usuarioExistente).CurrentValues.SetValues(usuario);
-            await _bancoContext.SaveChangesAsync();
+            var existingUsuario = _bancoContext.Usuarios.Find(usuario.UsuarioID);
+            if (existingUsuario != null)
+            {
+                _bancoContext.Entry(existingUsuario).CurrentValues.SetValues(usuario);
+                _bancoContext.SaveChanges();
+                return existingUsuario;
+            }
+            return null;
         }
-
-        public async Task<UsuariosModel> ListarPorIdAsync(int id)
+        public bool RemoverUsuario(int usuarioId)
         {
-            return await _bancoContext.Usuarios.FindAsync(id);
+            var usuario = _bancoContext.Usuarios.Find(usuarioId);
+            if (usuario != null)
+            {
+                _bancoContext.Usuarios.Remove(usuario);
+                _bancoContext.SaveChanges();
+                return true;
+            }
+            return false;
         }
-
-        public async Task RemoverUsuarioAsync(int usuarioId)
+        public UsuariosModel ObterUsuarioPorId(int usuarioId)
         {
-            var usuario = await _bancoContext.Usuarios.FindAsync(usuarioId);
-            if (usuario == null)
-                throw new KeyNotFoundException("Usuário não encontrado.");
-
-            _bancoContext.Usuarios.Remove(usuario);
-            await _bancoContext.SaveChangesAsync();
+            return _bancoContext.Usuarios.Find(usuarioId);
         }
-
-        public async Task<UsuariosModel> ObterUsuarioPorIdAsync(int usuarioId)
+        public List<UsuariosModel> ObterTodosUsuarios()
         {
-            return await _bancoContext.Usuarios.FindAsync(usuarioId);
+            return _bancoContext.Usuarios.ToList();
         }
-
-        public async Task<IEnumerable<UsuariosModel>> ObterTodosUsuariosAsync()
+        public bool UsuarioExiste(string nomeUsuario)
         {
-            return await _bancoContext.Usuarios.ToListAsync();
+            return _bancoContext.Usuarios.Any(u => u.NomeUsuario == nomeUsuario);
         }
 
-        public async Task<bool> UsuarioExisteAsync(string nomeUsuario)
+        public bool VerificarNomeUsuarioUnico(string nomeUsuario)
         {
-            return await _bancoContext.Usuarios.AnyAsync(u => u.NomeUsuario == nomeUsuario);
+            return !_bancoContext.Usuarios.Any(u => u.NomeUsuario == nomeUsuario);
         }
-
-        public async Task<bool> ApagarAsync(int id)
-        {
-            var usuario = await ListarPorIdAsync(id); 
-            if (usuario == null) return false;
-
-            _bancoContext.Usuarios.Remove(usuario);
-            await _bancoContext.SaveChangesAsync();
-            return true;
-        }
-
-       
     }
 }

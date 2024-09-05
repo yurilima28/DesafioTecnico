@@ -12,16 +12,14 @@ namespace Intelectah.Controllers
         private readonly IConcessionariasRepositorio _concessionariasRepositorio;
         private readonly BancoContext _bancoContext;
 
-        public ConcessionariasController(IConcessionariasRepositorio concessionariasRepositorio, BancoContext bancoContext)
+        public ConcessionariasController(IConcessionariasRepositorio concessionariasRepositorio)
         {
             _concessionariasRepositorio = concessionariasRepositorio;
-            _bancoContext = bancoContext;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var concessionarias = await _concessionariasRepositorio.ListarTodosAsync();
-
+            var concessionarias = _concessionariasRepositorio.BuscarTodos();
             var viewModel = concessionarias.Select(c => new ConcessionariasViewModel
             {
                 ConcessionariaID = c.ConcessionariaID,
@@ -41,7 +39,7 @@ namespace Intelectah.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> Criar()
+        public IActionResult Criar()
         {
             var viewModel = new ConcessionariasViewModel
             {
@@ -52,9 +50,9 @@ namespace Intelectah.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> ApagarConfirmacao(int Id)
+        public IActionResult ApagarConfirmacao(int id)
         {
-            var concessionaria = await _concessionariasRepositorio.ListarPorIdAsync(Id);
+            var concessionaria = _concessionariasRepositorio.ListarPorId(id);
 
             if (concessionaria == null)
             {
@@ -81,9 +79,9 @@ namespace Intelectah.Controllers
             return View(viewModel);
         }
 
-        public async Task<IActionResult> Editar(int id)
+        public IActionResult Editar(int id)
         {
-            var concessionaria = await _concessionariasRepositorio.ListarPorIdAsync(id);
+            var concessionaria = _concessionariasRepositorio.ListarPorId(id);
 
             if (concessionaria == null)
             {
@@ -111,19 +109,21 @@ namespace Intelectah.Controllers
             return View(viewModel);
         }
 
-
         [HttpPost]
         public IActionResult Criar(ConcessionariasViewModel viewModel)
         {
+            if (viewModel.Nome.Length > 100)
+            {
+                ModelState.AddModelError(nameof(viewModel.Nome), "O nome da concessionária não pode exceder 100 caracteres.");
+            }
+
+            if (!_concessionariasRepositorio.VerificarNomeConcessionariaUnico(viewModel.Nome))
+            {
+                ModelState.AddModelError(nameof(viewModel.Nome), "O nome da concessionária já existe.");
+            }
+
             if (ModelState.IsValid)
             {
-                bool nomeExiste =  _concessionariasRepositorio.VerificarNomeConcessionariaUnico(viewModel.Nome);
-                if (nomeExiste)
-                {
-                    ModelState.AddModelError(nameof(viewModel.Nome), "O nome da concessionária já está em uso.");
-                    return View(viewModel);
-                }
-
                 var concessionaria = new ConcessionariasModel
                 {
                     Nome = viewModel.Nome,
@@ -136,7 +136,8 @@ namespace Intelectah.Controllers
                     CapacidadeMax = viewModel.CapacidadeMax
                 };
 
-                 _concessionariasRepositorio.AdicionarAsync(concessionaria);
+                _concessionariasRepositorio.Adicionar(concessionaria);
+                TempData["MensagemSucesso"] = "Concessionária cadastrada com sucesso!";
                 return RedirectToAction("Index");
             }
 
@@ -146,9 +147,14 @@ namespace Intelectah.Controllers
         [HttpPost]
         public IActionResult Editar(ConcessionariasViewModel viewModel)
         {
+            if (viewModel.Nome.Length > 100)
+            {
+                ModelState.AddModelError(nameof(viewModel.Nome), "O nome da concessionária não pode exceder 100 caracteres.");
+            }
+
             if (ModelState.IsValid)
             {
-                bool nomeExiste =  _concessionariasRepositorio.VerificarNomeConcessionariaUnico(viewModel.Nome, viewModel.ConcessionariaID);
+                bool nomeExiste = _concessionariasRepositorio.VerificarNomeConcessionariaUnico(viewModel.Nome);
                 if (nomeExiste)
                 {
                     ModelState.AddModelError(nameof(viewModel.Nome), "O nome da concessionária já está em uso.");
@@ -168,7 +174,8 @@ namespace Intelectah.Controllers
                     CapacidadeMax = viewModel.CapacidadeMax
                 };
 
-                 _concessionariasRepositorio.AtualizarAsync(concessionaria);
+                _concessionariasRepositorio.Atualizar(concessionaria);
+                TempData["MensagemSucesso"] = "Concessionária atualizada com sucesso!";
                 return RedirectToAction("Index");
             }
 
@@ -176,11 +183,11 @@ namespace Intelectah.Controllers
         }
 
         [HttpPost]
-        public IActionResult Apagar(int Id)
+        public IActionResult Apagar(int id)
         {
             try
             {
-                bool apagado = _concessionariasRepositorio.Apagar(Id);
+                bool apagado = _concessionariasRepositorio.Apagar(id);
                 if (apagado)
                 {
                     TempData["MensagemSucesso"] = "Concessionária deletada com sucesso.";

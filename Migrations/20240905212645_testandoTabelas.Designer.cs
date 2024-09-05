@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Intelectah.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    [Migration("20240905195948_testeTabela")]
-    partial class testeTabela
+    [Migration("20240905212645_testandoTabelas")]
+    partial class testandoTabelas
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -34,8 +34,7 @@ namespace Intelectah.Migrations
 
                     b.Property<string>("CPF")
                         .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("nvarchar(14)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -52,8 +51,8 @@ namespace Intelectah.Migrations
 
                     b.Property<string>("Telefone")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
 
                     b.HasKey("ClienteID");
 
@@ -132,12 +131,12 @@ namespace Intelectah.Migrations
 
                     b.Property<string>("PaisOrigem")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("URL")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("FabricanteID");
 
@@ -219,6 +218,9 @@ namespace Intelectah.Migrations
                     b.Property<decimal>("ValorVeiculo")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("VendaID")
+                        .HasColumnType("int");
+
                     b.HasKey("VeiculoID");
 
                     b.HasIndex("ConcessionariasModelConcessionariaID");
@@ -270,7 +272,8 @@ namespace Intelectah.Migrations
 
                     b.HasIndex("UsuarioID");
 
-                    b.HasIndex("VeiculoID");
+                    b.HasIndex("VeiculoID")
+                        .IsUnique();
 
                     b.ToTable("Vendas");
                 });
@@ -331,8 +334,8 @@ namespace Intelectah.Migrations
                         .IsRequired();
 
                     b.HasOne("Intelectah.Models.VeiculosModel", "Veiculo")
-                        .WithMany()
-                        .HasForeignKey("VeiculoID")
+                        .WithOne("Vendas")
+                        .HasForeignKey("Intelectah.Models.VendasModel", "VeiculoID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -366,6 +369,12 @@ namespace Intelectah.Migrations
             modelBuilder.Entity("Intelectah.Models.FabricantesModel", b =>
                 {
                     b.Navigation("Veiculos");
+                });
+
+            modelBuilder.Entity("Intelectah.Models.VeiculosModel", b =>
+                {
+                    b.Navigation("Vendas")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

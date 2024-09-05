@@ -151,6 +151,15 @@ namespace Intelectah.Controllers
         [HttpPost]
         public IActionResult Criar(VeiculosViewModel viewModel)
         {
+            if (viewModel.ModeloVeiculo.Length > 100)
+            {
+                ModelState.AddModelError(nameof(viewModel.ModeloVeiculo), "O modelo do veículo não pode exceder 100 caracteres.");
+            }
+            if (viewModel.AnoFabricacao > DateTime.Now.Year)
+            {
+                ModelState.AddModelError(nameof(viewModel.AnoFabricacao), "O ano de fabricação não pode ser no futuro.");
+            }
+
             if (ModelState.IsValid)
             {
                 var veiculo = new VeiculosModel

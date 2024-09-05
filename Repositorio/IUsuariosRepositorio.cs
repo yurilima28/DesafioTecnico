@@ -5,14 +5,13 @@ namespace Intelectah.Repositorio
     public interface IUsuariosRepositorio
     {
         UsuariosModel BuscarPorLogin(string login);
-        Task AdicionarUsuarioAsync(UsuariosModel usuario);
-        Task AtualizarUsuarioAsync(UsuariosModel usuario);
-        Task RemoverUsuarioAsync(int usuarioId);
-        Task<UsuariosModel> ObterUsuarioPorIdAsync(int usuarioId);
-        Task<IEnumerable<UsuariosModel>> ObterTodosUsuariosAsync();
-        Task<bool> UsuarioExisteAsync(string nomeUsuario);
-        Task<bool> ApagarAsync(int Id);
-        Task<UsuariosModel> ListarPorIdAsync(int id);
-
+        UsuariosModel ListarPorId(int id);
+        UsuariosModel AdicionarUsuario(UsuariosModel usuario);
+        UsuariosModel AtualizarUsuario(UsuariosModel usuario);
+        bool RemoverUsuario(int usuarioId);
+        UsuariosModel ObterUsuarioPorId(int usuarioId);
+        List<UsuariosModel> ObterTodosUsuarios();
+        bool UsuarioExiste(string nomeUsuario);
+        bool VerificarNomeUsuarioUnico(string nomeUsuario);
     }
 }

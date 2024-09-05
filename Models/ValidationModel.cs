@@ -72,39 +72,7 @@ public class ValidationModel
             return ValidationResult.Success;
         }
     }
-    public class UniqueNomeConcessionariaAttribute : ValidationAttribute
-    {
-        private readonly IConcessionariasRepositorio _concessionariasRepositorio;
-
-        public UniqueNomeConcessionariaAttribute()
-        {
-            ErrorMessage = "O nome da concessionária já está em uso.";
-        }
-
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
-            if (value == null || string.IsNullOrWhiteSpace(value.ToString()))
-            {
-                return ValidationResult.Success;
-            }
-
-            var concessionariasRepositorio = (IConcessionariasRepositorio)validationContext.GetService(typeof(IConcessionariasRepositorio));
-            if (concessionariasRepositorio == null)
-            {
-                throw new InvalidOperationException("Não foi possível obter o repositório de concessionárias.");
-            }
-
-            var nomeConcessionaria = value.ToString();
-            var concessionariaExistente = _concessionariasRepositorio.ObterPorNome(nomeConcessionaria);
-
-            if (concessionariaExistente != null)
-            {
-                return new ValidationResult(ErrorMessage);
-            }
-
-            return ValidationResult.Success;
-        }
-    }
+  
     public class CPFValidationAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)

@@ -9,40 +9,38 @@ namespace Intelectah.Models
         public int ConcessionariaID { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "O nome da concessionária deve ter no máximo 100 caracteres.")]
-        [UniqueNomeConcessionaria]
+        [MaxLength(100, ErrorMessage = "O nome da concessionária deve ter no máximo 100 caracteres.")]
         public string Nome { get; set; }
 
         [Required]
-        [StringLength(255, ErrorMessage = "O endereço completo deve ter no máximo 255 caracteres.")]
+        [MaxLength(255, ErrorMessage = "O endereço completo deve ter no máximo 255 caracteres.")]
         public string EnderecoCompleto { get; set; }
 
         [Required]
-        [StringLength(50, ErrorMessage = "A cidade deve ter no máximo 50 caracteres.")]
+        [MaxLength(50, ErrorMessage = "A cidade deve ter no máximo 50 caracteres.")]
         public string Cidade { get; set; }
 
         [Required]
-        [StringLength(50, ErrorMessage = "O estado deve ter no máximo 50 caracteres.")]
+        [MaxLength(50, ErrorMessage = "O estado deve ter no máximo 50 caracteres.")]
         public string Estado { get; set; }
 
         [Required]
-        [StringLength(10, ErrorMessage = "O CEP deve ter no máximo 10 caracteres.")]
+        [MaxLength(10, ErrorMessage = "O CEP deve ter no máximo 10 caracteres.")]
         public string CEP { get; set; }
 
         [Required]
-        [StringLength(15, ErrorMessage = "O telefone deve ter no máximo 15 caracteres.")]
+        [MaxLength(15, ErrorMessage = "O telefone deve ter no máximo 15 caracteres.")]
         public string Telefone { get; set; }
 
         [Required]
         [EmailAddress(ErrorMessage = "O e-mail informado não é válido.")]
-        [StringLength(100, ErrorMessage = "O e-mail deve ter no máximo 100 caracteres.")]
+        [MaxLength(100, ErrorMessage = "O e-mail deve ter no máximo 100 caracteres.")]
         public string Email { get; set; }
 
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "A capacidade máxima de veículos deve ser um valor positivo.")]
         public int CapacidadeMax{ get; set; }
 
-        public virtual ICollection<UsuariosModel> Usuarios { get; set; }
         public virtual ICollection<VendasModel> Vendas { get; set; }  
         public virtual ICollection<VeiculosModel> Veiculos { get; set; }
         public virtual ICollection<FabricantesModel> Fabricantes { get; set; }

@@ -15,7 +15,7 @@ namespace Intelectah.Repositorio
 
         public ClientesModel ListarPorId(int id)
         {
-            return _bancoContext.Clientes.FirstOrDefault(c => c.ClienteID == id);
+            return _bancoContext.Clientes.Find(id);
         }
 
         public List<ClientesModel> BuscarTodos()
@@ -30,43 +30,44 @@ namespace Intelectah.Repositorio
             return cliente;
         }
 
-        public async Task AdicionarAsync(ClientesModel cliente)
-        {
-            await _bancoContext.Clientes.AddAsync(cliente);
-            await _bancoContext.SaveChangesAsync();
-        }
-
         public ClientesModel Atualizar(ClientesModel cliente)
         {
-            var clienteDb = ListarPorId(cliente.ClienteID);
-
-            if (clienteDb == null) throw new Exception("Cliente não encontrado.");
-
-            clienteDb.Nome = cliente.Nome;
-            clienteDb.Telefone = cliente.Telefone;
-            cliente.Email = cliente.Email;
-            cliente.CPF = cliente.CPF;
-
-            _bancoContext.Clientes.Update(clienteDb);
+            _bancoContext.Clientes.Update(cliente);
             _bancoContext.SaveChanges();
-            return clienteDb;
+            return cliente;
         }
 
         public bool Apagar(int id)
         {
-            var clienteDb = ListarPorId(id);
+            var cliente = _bancoContext.Clientes.Find(id);
+            if (cliente == null)
+            {
+                return false;
+            }
 
-            if (clienteDb == null) throw new Exception("Cliente não encontrado.");
-
-            _bancoContext.Clientes.Remove(clienteDb);
+            _bancoContext.Clientes.Remove(cliente);
             _bancoContext.SaveChanges();
             return true;
         }
 
         public ClientesModel ObterPorNome(string nomeCliente)
         {
-            return _bancoContext.Clientes
-                .FirstOrDefault(c => c.Nome.ToLower() == nomeCliente.ToLower());
+            var nomeLower = nomeCliente.ToLower();
+            return _bancoContext.Clientes.FirstOrDefault(c => c.Nome.ToLower() == nomeLower);
+        }
+
+        public bool VerificarNomeClienteUnico(string nomeCliente, int? clienteID = null)
+        {
+            var nomeMinusc = nomeCliente.ToLower();
+
+            return !_bancoContext.Clientes.Any(c => c.Nome.ToLower() == nomeMinusc && (!clienteID.HasValue || c.ClienteID != clienteID.Value));
+        }
+
+        public bool VerificarCpfUnico(string cpf, int? clienteID = null)
+        {
+            var cpfLower = cpf.ToLower();
+
+            return !_bancoContext.Clientes.Any(c => c.CPF == cpfLower && (!clienteID.HasValue || c.ClienteID != clienteID.Value));
         }
     }
 }

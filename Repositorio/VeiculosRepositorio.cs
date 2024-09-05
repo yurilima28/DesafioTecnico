@@ -68,5 +68,9 @@ namespace Intelectah.Repositorio
             return true;
         }
 
+        public bool VerificarSeVeiculoVendido(int veiculoId)
+        {
+            return _bancoContext.Vendas.Any(v => v.VeiculoID == veiculoId);
+        }
     }
 }

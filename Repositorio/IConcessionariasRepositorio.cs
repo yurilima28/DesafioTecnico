@@ -4,13 +4,13 @@ namespace Intelectah.Repositorio
 {
     public interface IConcessionariasRepositorio
     {
-        Task<IEnumerable<ConcessionariasModel>> ListarTodosAsync();
-        Task<ConcessionariasModel> ListarPorIdAsync(int id);
-        Task AdicionarAsync(ConcessionariasModel concessionaria);
-        Task AtualizarAsync(ConcessionariasModel concessionaria);
-        bool Apagar(int Id);
+        ConcessionariasModel ListarPorId(int id);
+        List<ConcessionariasModel> BuscarTodos();
+        ConcessionariasModel Adicionar(ConcessionariasModel concessionaria);
+        ConcessionariasModel Atualizar(ConcessionariasModel concessionaria);
+        bool Apagar(int id);
         ConcessionariasModel ObterPorNome(string nomeConcessionaria);
-        bool VerificarNomeConcessionariaUnico(string nomeConcessionaria, int? concessionariaID = null);
+        bool VerificarNomeConcessionariaUnico(string nomeConcessionaria);
 
     }
 }

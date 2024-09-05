@@ -16,41 +16,20 @@ namespace Intelectah.Controllers
             _usuariosRepositorio = usuariosRepositorio;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var usuarios = await _usuariosRepositorio.ObterTodosUsuariosAsync();
+            var usuarios = _usuariosRepositorio.ObterTodosUsuarios();
             return View(usuarios);
         }
 
-        public async Task<IActionResult> Criar()
+        public IActionResult Criar()
         {
-        
             return View(new UsuariosViewModel());
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Criar(UsuariosViewModel usuarioViewModel)
+        public IActionResult Editar(int id)
         {
-            if (ModelState.IsValid)
-            {
-                var usuario = new UsuariosModel
-                {
-                    NomeUsuario = usuarioViewModel.NomeUsuario,
-                    Login = usuarioViewModel.Login,
-                    Senha = usuarioViewModel.Senha,
-                    Email = usuarioViewModel.Email,
-                    NivelAcesso = usuarioViewModel.NivelAcesso,
-                };
-
-                await _usuariosRepositorio.AdicionarUsuarioAsync(usuario);
-                return RedirectToAction(nameof(Index));
-            }
-            return View(usuarioViewModel);
-        }
-
-        public async Task<IActionResult> Editar(int id)
-        {
-            var usuario = await _usuariosRepositorio.ObterUsuarioPorIdAsync(id);
+            var usuario = _usuariosRepositorio.ObterUsuarioPorId(id);
             if (usuario == null)
             {
                 return NotFound();
@@ -68,8 +47,52 @@ namespace Intelectah.Controllers
             return View(usuarioViewModel);
         }
 
+        public IActionResult ApagarConfirmacao(int id)
+        {
+            var usuario = _usuariosRepositorio.ListarPorId(id);
+            if (usuario == null)
+            {
+                TempData["MensagemErro"] = "Usuário não encontrado.";
+                return RedirectToAction("Index");
+            }
+
+            var viewModel = new UsuariosViewModel
+            {
+                UsuarioId = usuario.UsuarioID,
+                NomeUsuario = usuario.NomeUsuario,
+                Email = usuario.Email,
+            };
+
+            return View(viewModel);
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Editar(int id, UsuariosViewModel usuarioViewModel)
+        public IActionResult Criar(UsuariosViewModel usuarioViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                if (!_usuariosRepositorio.VerificarNomeUsuarioUnico(usuarioViewModel.NomeUsuario))
+                {
+                    ModelState.AddModelError("NomeUsuario", "Este nome de usuário já está em uso.");
+                    return View(usuarioViewModel);
+                }
+                var usuario = new UsuariosModel
+                {
+                    NomeUsuario = usuarioViewModel.NomeUsuario,
+                    Login = usuarioViewModel.Login,
+                    Senha = usuarioViewModel.Senha,
+                    Email = usuarioViewModel.Email,
+                    NivelAcesso = usuarioViewModel.NivelAcesso,
+                };
+
+                _usuariosRepositorio.AdicionarUsuario(usuario);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(usuarioViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Editar(int id, UsuariosViewModel usuarioViewModel)
         {
             if (id != usuarioViewModel.UsuarioId)
             {
@@ -89,11 +112,11 @@ namespace Intelectah.Controllers
 
                 try
                 {
-                    await _usuariosRepositorio.AtualizarUsuarioAsync(usuario);
+                    _usuariosRepositorio.AtualizarUsuario(usuario);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (await _usuariosRepositorio.ObterUsuarioPorIdAsync(id) == null)
+                    if (_usuariosRepositorio.ObterUsuarioPorId(id) == null)
                     {
                         return NotFound();
                     }
@@ -102,19 +125,17 @@ namespace Intelectah.Controllers
                         throw;
                     }
                 }
-
                 return RedirectToAction(nameof(Index));
             }
-
             return View(usuarioViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Apagar(int id)
+        public IActionResult Apagar(int id)
         {
             try
             {
-                bool apagado = await _usuariosRepositorio.ApagarAsync(id);
+                bool apagado = _usuariosRepositorio.RemoverUsuario(id);
                 if (apagado)
                 {
                     TempData["MensagemSucesso"] = "Usuário excluído com sucesso";
@@ -130,25 +151,6 @@ namespace Intelectah.Controllers
                 TempData["MensagemErro"] = $"Não foi possível excluir o usuário. Detalhe do erro: {ex.Message}";
                 return RedirectToAction("Index");
             }
-        }
-
-        public async Task<IActionResult> ApagarConfirmacao(int id)
-        {
-            var usuario = await _usuariosRepositorio.ListarPorIdAsync(id);
-            if (usuario == null)
-            {
-                TempData["MensagemErro"] = "Usuário não encontrado.";
-                return RedirectToAction("Index");
-            }
-
-            var viewModel = new UsuariosViewModel
-            {
-                UsuarioId = usuario.UsuarioID,
-                NomeUsuario = usuario.NomeUsuario,
-                Email = usuario.Email,
-            };
-
-            return View(viewModel);
         }
     }
 }

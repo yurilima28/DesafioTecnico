@@ -135,6 +135,10 @@ namespace Intelectah.Controllers
         [HttpPost]
         public IActionResult Criar(FabricantesViewModel viewModel)
         {
+            if (viewModel.NomeFabricante.Length > 100)
+            {
+                ModelState.AddModelError(nameof(viewModel.NomeFabricante), "O nome do fabricante não pode exceder 100 caracteres.");
+            }
             if (!_fabricantesRepositorio.VerificarNomeFabricanteUnico(viewModel.NomeFabricante))
             {
                 ModelState.AddModelError(nameof(viewModel.NomeFabricante), "O nome do fabricante já existe.");
@@ -161,7 +165,6 @@ namespace Intelectah.Controllers
                     ModelState.AddModelError(string.Empty, $"Ocorreu um erro ao salvar o fabricante: {ex.Message}");
                 }
             }
-
             viewModel.OpcaoPaises = GetListaPaises();
             return View(viewModel);
         }
@@ -169,6 +172,11 @@ namespace Intelectah.Controllers
         [HttpPost]
         public async Task<IActionResult> Editar(FabricantesViewModel viewModel)
         {
+            if (viewModel.NomeFabricante.Length > 100)
+            {
+                ModelState.AddModelError(nameof(viewModel.NomeFabricante), "O nome do fabricante não pode exceder 100 caracteres.");
+            }
+
             if (ModelState.IsValid)
             {
                 try
@@ -192,7 +200,6 @@ namespace Intelectah.Controllers
                     TempData["MensagemErro"] = $"Erro ao atualizar o fabricante: {ex.Message}";
                 }
             }
-
             viewModel.OpcaoPaises = GetListaPaises();
             return View(viewModel);
         }

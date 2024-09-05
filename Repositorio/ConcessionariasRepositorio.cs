@@ -7,37 +7,43 @@ namespace Intelectah.Repositorio
     public class ConcessionariasRepositorio : IConcessionariasRepositorio
     {
         private readonly BancoContext _bancoContext;
-
         public ConcessionariasRepositorio(BancoContext bancoContext)
         {
             _bancoContext = bancoContext;
         }
 
-        public async Task<IEnumerable<ConcessionariasModel>> ListarTodosAsync()
+        public ConcessionariasModel ListarPorId(int id)
         {
-            return await _bancoContext.Concessionarias.ToListAsync();
+            return _bancoContext.Concessionarias.Find(id);
         }
 
-        public async Task<ConcessionariasModel> ListarPorIdAsync(int Id)
+        public List<ConcessionariasModel> BuscarTodos()
         {
-            return await _bancoContext.Concessionarias.FindAsync(Id);
+            return _bancoContext.Concessionarias.ToList();
         }
 
-        public async Task AdicionarAsync(ConcessionariasModel concessionaria)
+        public ConcessionariasModel Adicionar(ConcessionariasModel concessionaria)
         {
             _bancoContext.Concessionarias.Add(concessionaria);
-            await _bancoContext.SaveChangesAsync();
+            _bancoContext.SaveChanges();
+            return concessionaria; 
         }
 
-        public async Task AtualizarAsync(ConcessionariasModel concessionaria)
+        public ConcessionariasModel Atualizar(ConcessionariasModel concessionaria)
         {
-            _bancoContext.Concessionarias.Update(concessionaria);
-            await _bancoContext.SaveChangesAsync();
+            var existente = _bancoContext.Concessionarias.Find(concessionaria.ConcessionariaID);
+            if (existente != null)
+            {
+                _bancoContext.Entry(existente).CurrentValues.SetValues(concessionaria);
+                _bancoContext.SaveChanges();
+                return concessionaria; 
+            }
+            return null; 
         }
 
-        public bool Apagar(int Id)
+        public bool Apagar(int id)
         {
-            var concessionaria = _bancoContext.Concessionarias.Find(Id);
+            var concessionaria = _bancoContext.Concessionarias.Find(id);
             if (concessionaria == null)
             {
                 return false;
@@ -54,11 +60,10 @@ namespace Intelectah.Repositorio
             return _bancoContext.Concessionarias.FirstOrDefault(c => c.Nome.ToLower() == nomeLower);
         }
 
-        public bool VerificarNomeConcessionariaUnico(string nomeConcessionaria, int? concessionariaID = null)
+        public bool VerificarNomeConcessionariaUnico(string nomeConcessionaria)
         {
             var nomeMinusc = nomeConcessionaria.ToLower();
-
-            return !_bancoContext.Concessionarias.Any(c => c.Nome.ToLower() == nomeMinusc && (!concessionariaID.HasValue || c.ConcessionariaID != concessionariaID.Value));
+            return !_bancoContext.Concessionarias.Any(c => c.Nome.ToLower() == nomeMinusc);
         }
     }
 }

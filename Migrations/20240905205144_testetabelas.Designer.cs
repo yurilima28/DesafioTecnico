@@ -4,6 +4,7 @@ using Intelectah.Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Intelectah.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    partial class BancoContextModelSnapshot : ModelSnapshot
+    [Migration("20240905205144_testetabelas")]
+    partial class testetabelas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,9 +218,6 @@ namespace Intelectah.Migrations
                     b.Property<decimal>("ValorVeiculo")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("VendaID")
-                        .HasColumnType("int");
-
                     b.HasKey("VeiculoID");
 
                     b.HasIndex("ConcessionariasModelConcessionariaID");
@@ -270,8 +269,7 @@ namespace Intelectah.Migrations
 
                     b.HasIndex("UsuarioID");
 
-                    b.HasIndex("VeiculoID")
-                        .IsUnique();
+                    b.HasIndex("VeiculoID");
 
                     b.ToTable("Vendas");
                 });
@@ -332,8 +330,8 @@ namespace Intelectah.Migrations
                         .IsRequired();
 
                     b.HasOne("Intelectah.Models.VeiculosModel", "Veiculo")
-                        .WithOne("Vendas")
-                        .HasForeignKey("Intelectah.Models.VendasModel", "VeiculoID")
+                        .WithMany()
+                        .HasForeignKey("VeiculoID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -367,12 +365,6 @@ namespace Intelectah.Migrations
             modelBuilder.Entity("Intelectah.Models.FabricantesModel", b =>
                 {
                     b.Navigation("Veiculos");
-                });
-
-            modelBuilder.Entity("Intelectah.Models.VeiculosModel", b =>
-                {
-                    b.Navigation("Vendas")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
