@@ -1,7 +1,6 @@
-﻿using Intelectah.Dapper;
-using Intelectah.Enums;
+﻿using Intelectah.Enums;
 using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
+using static ValidationModel;
 
 namespace Intelectah.Models
 {
@@ -15,7 +14,7 @@ namespace Intelectah.Models
         public string ModeloVeiculo { get; set; }
 
         [Required(ErrorMessage = "O ano de fabricação é obrigatório")]
-        [Range(1, int.MaxValue, ErrorMessage = "O ano de fabricação deve ser um ano válido.")]
+        [AnoFabricacao]
         public int AnoFabricacao { get; set; }
 
         [Required]

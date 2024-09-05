@@ -51,10 +51,14 @@ namespace Intelectah.Repositorio
         public ConcessionariasModel ObterPorNome(string nomeConcessionaria)
         {
             var nomeLower = nomeConcessionaria.ToLower();
-            return _bancoContext.Concessionarias
-                .FirstOrDefault(c => c.Nome.ToLower() == nomeLower);
+            return _bancoContext.Concessionarias.FirstOrDefault(c => c.Nome.ToLower() == nomeLower);
         }
 
+        public bool VerificarNomeConcessionariaUnico(string nomeConcessionaria, int? concessionariaID = null)
+        {
+            var nomeMinusc = nomeConcessionaria.ToLower();
 
+            return !_bancoContext.Concessionarias.Any(c => c.Nome.ToLower() == nomeMinusc && (!concessionariaID.HasValue || c.ConcessionariaID != concessionariaID.Value));
+        }
     }
 }

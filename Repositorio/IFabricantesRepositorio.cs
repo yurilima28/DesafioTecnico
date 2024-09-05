@@ -4,13 +4,13 @@ namespace Intelectah.Repositorio
 {
     public interface IFabricantesRepositorio
     {
-        FabricantesModel ListarPorId(int Id);
+        FabricantesModel ListarPorId(int id);
         List<FabricantesModel> BuscarTodos();
         FabricantesModel Adicionar(FabricantesModel fabricante);
         FabricantesModel Atualizar(FabricantesModel fabricante);
-        bool Apagar(int Id);
+        bool Apagar(int id);
         FabricantesModel ObterPorNome(string nomeFabricante);
-        Task AdicionarAsync(FabricantesModel fabricante);   
+        bool VerificarNomeFabricanteUnico(string nomeFabricante);
     }
 
 }

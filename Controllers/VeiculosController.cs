@@ -104,6 +104,27 @@ namespace Intelectah.Controllers
 
             return View(viewModel);
         }
+        public IActionResult Apagar(int id)
+        {
+            try
+            {
+                bool apagado = _veiculosRepositorio.Apagar(id);
+                if (apagado)
+                {
+                    TempData["MensagemSucesso"] = "Veículo deletado com sucesso";
+                }
+                else
+                {
+                    TempData["MensagemErro"] = "Não foi possível deletar o veículo.";
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception erro)
+            {
+                TempData["MensagemErro"] = $"Não foi possível deletar o veículo, tente novamente. Detalhe do erro: {erro.Message}";
+                return RedirectToAction("Index");
+            }
+        }
 
         public async Task<IActionResult> ApagarConfirmacao(int id)
         {
@@ -205,28 +226,6 @@ namespace Intelectah.Controllers
                 .ToList();
 
             return View(viewModel);
-        }
-
-        public IActionResult Apagar(int id)
-        {
-            try
-            {
-                bool apagado = _veiculosRepositorio.Apagar(id);
-                if (apagado)
-                {
-                    TempData["MensagemSucesso"] = "Veículo deletado com sucesso";
-                }
-                else
-                {
-                    TempData["MensagemErro"] = "Não foi possível deletar o veículo.";
-                }
-                return RedirectToAction("Index");
-            }
-            catch (Exception erro)
-            {
-                TempData["MensagemErro"] = $"Não foi possível deletar o veículo, tente novamente. Detalhe do erro: {erro.Message}";
-                return RedirectToAction("Index");
-            }
-        }
+        }       
     }
 }

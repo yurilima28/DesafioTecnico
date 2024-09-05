@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Intelectah.Migrations
 {
-    public partial class testeTabelas : Migration
+    public partial class testeTabela : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,7 @@ namespace Intelectah.Migrations
                     ClienteID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    CPF = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    CPF = table.Column<string>(type: "nvarchar(14)", maxLength: 14, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Telefone = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     FezCompras = table.Column<bool>(type: "bit", nullable: false)
@@ -55,7 +55,7 @@ namespace Intelectah.Migrations
                     NomeFabricante = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PaisOrigem = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     AnoFundacao = table.Column<int>(type: "int", nullable: false),
-                    URL = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    URL = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ConcessionariasModelConcessionariaID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -74,6 +74,7 @@ namespace Intelectah.Migrations
                 {
                     UsuarioID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Login = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NomeUsuario = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Senha = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
@@ -130,7 +131,10 @@ namespace Intelectah.Migrations
                     DataVenda = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ValorTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     UsuarioID = table.Column<int>(type: "int", nullable: false),
-                    ConcessionariaID = table.Column<int>(type: "int", nullable: false)
+                    ConcessionariaID = table.Column<int>(type: "int", nullable: false),
+                    FabricanteID = table.Column<int>(type: "int", nullable: false),
+                    VeiculoID = table.Column<int>(type: "int", nullable: false),
+                    FabricantesFabricanteID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -148,11 +152,23 @@ namespace Intelectah.Migrations
                         principalColumn: "ConcessionariaID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_Vendas_Fabricantes_FabricantesFabricanteID",
+                        column: x => x.FabricantesFabricanteID,
+                        principalTable: "Fabricantes",
+                        principalColumn: "FabricanteID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Vendas_Usuarios_UsuarioID",
                         column: x => x.UsuarioID,
                         principalTable: "Usuarios",
                         principalColumn: "UsuarioID",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Vendas_Veiculos_VeiculoID",
+                        column: x => x.VeiculoID,
+                        principalTable: "Veiculos",
+                        principalColumn: "VeiculoID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -186,27 +202,37 @@ namespace Intelectah.Migrations
                 column: "ConcessionariaID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Vendas_FabricantesFabricanteID",
+                table: "Vendas",
+                column: "FabricantesFabricanteID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Vendas_UsuarioID",
                 table: "Vendas",
                 column: "UsuarioID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vendas_VeiculoID",
+                table: "Vendas",
+                column: "VeiculoID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Veiculos");
-
-            migrationBuilder.DropTable(
                 name: "Vendas");
-
-            migrationBuilder.DropTable(
-                name: "Fabricantes");
 
             migrationBuilder.DropTable(
                 name: "Clientes");
 
             migrationBuilder.DropTable(
                 name: "Usuarios");
+
+            migrationBuilder.DropTable(
+                name: "Veiculos");
+
+            migrationBuilder.DropTable(
+                name: "Fabricantes");
 
             migrationBuilder.DropTable(
                 name: "Concessionarias");

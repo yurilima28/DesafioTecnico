@@ -10,5 +10,7 @@ namespace Intelectah.Repositorio
         Task AtualizarAsync(ConcessionariasModel concessionaria);
         bool Apagar(int Id);
         ConcessionariasModel ObterPorNome(string nomeConcessionaria);
+        bool VerificarNomeConcessionariaUnico(string nomeConcessionaria, int? concessionariaID = null);
+
     }
 }

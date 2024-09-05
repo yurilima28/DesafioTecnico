@@ -11,9 +11,9 @@ namespace Intelectah.Repositorio
         {
             _bancoContext = bancoContext;
         }
-        public FabricantesModel ListarPorId(int Id)
+        public FabricantesModel ListarPorId(int id)
         {
-            return _bancoContext.Fabricantes.FirstOrDefault(x => x.FabricanteID == Id);
+            return _bancoContext.Fabricantes.FirstOrDefault(x => x.FabricanteID == id);
         }
         public List<FabricantesModel> BuscarTodos()
         {
@@ -25,12 +25,6 @@ namespace Intelectah.Repositorio
             _bancoContext.Fabricantes.Add(fabricante);
             _bancoContext.SaveChanges();
             return fabricante;
-        }
-
-        public async Task AdicionarAsync(FabricantesModel fabricante)
-        {
-            await _bancoContext.Fabricantes.AddAsync(fabricante);
-            await _bancoContext.SaveChangesAsync();
         }
 
         public FabricantesModel Atualizar(FabricantesModel fabricante)
@@ -50,9 +44,9 @@ namespace Intelectah.Repositorio
 
         }
 
-        public bool Apagar(int Id)
+        public bool Apagar(int id)
         {
-            FabricantesModel fabricanteDB = ListarPorId(Id);
+            FabricantesModel fabricanteDB = ListarPorId(id);
 
             if (fabricanteDB == null) throw new Exception("Houve um erro ao apagar o fabricante");
 
@@ -63,8 +57,11 @@ namespace Intelectah.Repositorio
 
         public FabricantesModel ObterPorNome(string nomeFabricante)
         {
-            return _bancoContext.Fabricantes
-        .FirstOrDefault(f => f.NomeFabricante.ToLower() == nomeFabricante.ToLower());
+            return _bancoContext.Fabricantes.FirstOrDefault(f => f.NomeFabricante.ToLower() == nomeFabricante.ToLower());
+        }
+        public bool VerificarNomeFabricanteUnico(string nomeFabricante)
+        {
+            return !_bancoContext.Fabricantes.Any(f => f.NomeFabricante.ToLower() == nomeFabricante.ToLower());
         }
     }
 }

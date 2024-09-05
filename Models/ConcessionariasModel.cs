@@ -10,7 +10,7 @@ namespace Intelectah.Models
 
         [Required]
         [StringLength(100, ErrorMessage = "O nome da concessionária deve ter no máximo 100 caracteres.")]
-        [UniqueNomeConcessonaria]
+        [UniqueNomeConcessionaria]
         public string Nome { get; set; }
 
         [Required]
@@ -27,12 +27,10 @@ namespace Intelectah.Models
 
         [Required]
         [StringLength(10, ErrorMessage = "O CEP deve ter no máximo 10 caracteres.")]
-        [RegularExpression(@"^\d{5}-\d{3}$", ErrorMessage = "O CEP deve estar no formato 12345-678.")]
         public string CEP { get; set; }
 
         [Required]
         [StringLength(15, ErrorMessage = "O telefone deve ter no máximo 15 caracteres.")]
-        [RegularExpression(@"^\(\d{2}\) \d{4,5}-\d{4}$", ErrorMessage = "O telefone deve estar no formato (XX) XXXX-XXXX ou (XX) XXXXX-XXXX.")]
         public string Telefone { get; set; }
 
         [Required]

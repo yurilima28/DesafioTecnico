@@ -8,7 +8,7 @@
 
 <div class="form-group col-md-6">
     <label asp-for="CPF" class="form-label"></label>
-    <input asp-for="CPF" class="form-control" />
+    <input asp-for="CPF" class="form-control" id="cpf" />
     <span asp-validation-for="CPF" class="text-danger"></span>
 </div>
 
@@ -23,3 +23,27 @@
     <input asp-for="Telefone" class="form-control" />
     <span asp-validation-for="Telefone" class="text-danger"></span>
 </div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/inputmask/5.0.8/inputmask.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            Inputmask("999.999.999-99").mask(document.querySelector('cpf'));
+
+            const cpfInput = document.getElementById('cpf');
+            const cpfError = document.querySelector('cpf');
+
+            cpfInput.addEventListener('blur', function () {
+                const cpf = cpfInput.value;
+                if (!validarCPF(cpf)) {
+                    cpfError.textContent = 'CPF inválido!';
+                    cpfInput.classList.add('is-invalid');
+                } else {
+                    cpfError.textContent = '';
+                    cpfInput.classList.remove('is-invalid');
+                }
+            });
+        });
+    </script>
+}

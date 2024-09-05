@@ -1,6 +1,4 @@
-﻿using Intelectah.Dapper;
-using System.ComponentModel.DataAnnotations;
-using Intelectah.Models;
+﻿using System.ComponentModel.DataAnnotations;
 using static ValidationModel;
 
 namespace Intelectah.Models
@@ -20,14 +18,15 @@ namespace Intelectah.Models
         public string PaisOrigem { get; set; }
 
         [Required(ErrorMessage = "O ano de fundação é obrigatório")]
-        [AnoAtual]
+        [AnoFundacao]
         public int AnoFundacao { get; set; }
 
         [Required(ErrorMessage = "A URL é obrigatória")]
-        [StringLength(255, ErrorMessage = "A URL não pode conter mais de 255 carcteres")]
+        [Url]
         public string URL { get; set; }
-        public ICollection<VeiculosModel> Veiculos { get; set; }
 
+        public ICollection<VeiculosModel> Veiculos { get; set; } = new List<VeiculosModel>();
+        public FabricantesModel() { }
         public FabricantesModel(int fabricanteID, string nomeFabricante, string paisOrigem, int anoFundacao, string url)
         {
             FabricanteID = fabricanteID;
@@ -36,8 +35,6 @@ namespace Intelectah.Models
             AnoFundacao = anoFundacao;
             URL = url;
         }
-        public FabricantesModel()
-        {
-        }
+
     }
 }

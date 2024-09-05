@@ -113,10 +113,17 @@ namespace Intelectah.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Criar(ConcessionariasViewModel viewModel)
+        public IActionResult Criar(ConcessionariasViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
+                bool nomeExiste =  _concessionariasRepositorio.VerificarNomeConcessionariaUnico(viewModel.Nome);
+                if (nomeExiste)
+                {
+                    ModelState.AddModelError(nameof(viewModel.Nome), "O nome da concessionária já está em uso.");
+                    return View(viewModel);
+                }
+
                 var concessionaria = new ConcessionariasModel
                 {
                     Nome = viewModel.Nome,
@@ -129,7 +136,39 @@ namespace Intelectah.Controllers
                     CapacidadeMax = viewModel.CapacidadeMax
                 };
 
-                await _concessionariasRepositorio.AdicionarAsync(concessionaria);
+                 _concessionariasRepositorio.AdicionarAsync(concessionaria);
+                return RedirectToAction("Index");
+            }
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Editar(ConcessionariasViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                bool nomeExiste =  _concessionariasRepositorio.VerificarNomeConcessionariaUnico(viewModel.Nome, viewModel.ConcessionariaID);
+                if (nomeExiste)
+                {
+                    ModelState.AddModelError(nameof(viewModel.Nome), "O nome da concessionária já está em uso.");
+                    return View(viewModel);
+                }
+
+                var concessionaria = new ConcessionariasModel
+                {
+                    ConcessionariaID = viewModel.ConcessionariaID,
+                    Nome = viewModel.Nome,
+                    EnderecoCompleto = viewModel.Endereco.EnderecoCompleto,
+                    Cidade = viewModel.Endereco.Cidade,
+                    Estado = viewModel.Endereco.Estado,
+                    CEP = viewModel.Endereco.CEP,
+                    Telefone = viewModel.Telefone,
+                    Email = viewModel.Email,
+                    CapacidadeMax = viewModel.CapacidadeMax
+                };
+
+                 _concessionariasRepositorio.AtualizarAsync(concessionaria);
                 return RedirectToAction("Index");
             }
 
@@ -157,31 +196,6 @@ namespace Intelectah.Controllers
                 TempData["MensagemErro"] = $"Não foi possível deletar a concessionária, tente novamente. Detalhe do erro: {erro.Message}";
                 return RedirectToAction("Index");
             }
-        }
-    
-        [HttpPost]
-        public async Task<IActionResult> Editar(ConcessionariasViewModel viewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var concessionaria = new ConcessionariasModel
-                {
-                    ConcessionariaID = viewModel.ConcessionariaID,
-                    Nome = viewModel.Nome,
-                    EnderecoCompleto = viewModel.Endereco.EnderecoCompleto,
-                    Cidade = viewModel.Endereco.Cidade,
-                    Estado = viewModel.Endereco.Estado,
-                    CEP = viewModel.Endereco.CEP,
-                    Telefone = viewModel.Telefone,
-                    Email = viewModel.Email,
-                    CapacidadeMax = viewModel.CapacidadeMax
-                };
-
-                await _concessionariasRepositorio.AtualizarAsync(concessionaria);
-                return RedirectToAction("Index");
-            }
-
-            return View(viewModel);
         }
     }
 }

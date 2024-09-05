@@ -5,10 +5,7 @@ using Intelectah.Services;
 using Intelectah.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System.Diagnostics.Metrics;
-using static Intelectah.Services.CountryService;
 
 namespace Intelectah.Controllers
 {
@@ -24,34 +21,34 @@ namespace Intelectah.Controllers
             _countryService = countryService;
             _bancoContext = bancoContext;
         }
+
         private static readonly Dictionary<string, string> CountryTranslations = new Dictionary<string, string>
         {
-
             { "Brazil", "Brasil" }
         };
-        private async Task<IEnumerable<SelectListItem>> GetListaPaisesAsync()
+
+        private List<SelectListItem> GetListaPaises()
         {
             using (var httpClient = new HttpClient())
             {
-                var response = await httpClient.GetStringAsync("https://restcountries.com/v3.1/all");
+                var response = httpClient.GetStringAsync("https://restcountries.com/v3.1/all").Result;
                 var countries = JsonConvert.DeserializeObject<List<CountryModel>>(response);
 
                 var selectList = countries.Select(c => new SelectListItem
                 {
                     Value = c.Cca2,
                     Text = CountryTranslations.ContainsKey(c.Name.Common) ? CountryTranslations[c.Name.Common] : c.Name.Common
-                }).ToList();
-
-                selectList = selectList.OrderBy(c => c.Text).ToList();
-
+                }).OrderBy(c => c.Text).ToList();
                 return selectList;
             }
         }
+
         public async Task<IActionResult> Index()
         {
             List<FabricantesModel> fabricantes = _fabricantesRepositorio.BuscarTodos();
 
             List<FabricantesViewModel> viewModel = fabricantes.Select(f => new FabricantesViewModel
+
             {
                 FabricanteID = f.FabricanteID,
                 NomeFabricante = f.NomeFabricante,
@@ -59,29 +56,22 @@ namespace Intelectah.Controllers
                 AnoFundacao = f.AnoFundacao,
                 URL = f.URL,
             }).ToList();
-
             return View(viewModel);
         }
 
-        public async Task<IActionResult> Criar()
+        public IActionResult Criar()
         {
-            var fabricantesModel = new FabricantesModel();
-
             var viewModel = new FabricantesViewModel
             {
-                FabricanteID = fabricantesModel.FabricanteID,
-                NomeFabricante = fabricantesModel.NomeFabricante,
-                PaisOrigem = fabricantesModel.PaisOrigem,
-                AnoFundacao = fabricantesModel.AnoFundacao,
-                URL = fabricantesModel.URL,
-                OpcaoPaises = await GetListaPaisesAsync(),
+                OpcaoPaises = GetListaPaises()
             };
             return View(viewModel);
         }
 
-        public  IActionResult Editar(int Id)
+        public IActionResult Editar(int id)
         {
-            var fabricante = _fabricantesRepositorio.ListarPorId(Id);
+            var fabricante = _fabricantesRepositorio.ListarPorId(id);
+
             if (fabricante == null)
             {
                 return NotFound();
@@ -94,39 +84,16 @@ namespace Intelectah.Controllers
                 PaisOrigem = fabricante.PaisOrigem,
                 AnoFundacao = fabricante.AnoFundacao,
                 URL = fabricante.URL,
-                OpcaoPaises = GetListaPaisesAsync().Result 
+                OpcaoPaises = GetListaPaises()
             };
-
             return View(viewModel);
         }
 
-
-        public async Task<IActionResult> ApagarConfirmacao(int Id)
-        {
-            var fabricante = _fabricantesRepositorio.ListarPorId(Id);
-            if (fabricante == null)
-            {
-                TempData["MensagemErro"] = "Fabricante não encontrado.";
-                return RedirectToAction("Index");
-            }
-
-            var viewModel = new FabricantesViewModel
-            {
-                FabricanteID = fabricante.FabricanteID,
-                NomeFabricante = fabricante.NomeFabricante,
-                PaisOrigem = fabricante.PaisOrigem,
-                AnoFundacao = fabricante.AnoFundacao,
-                URL = fabricante.URL,
-            };
-
-            return View(viewModel);
-        }
-
-        public IActionResult Apagar(int Id)
+        public IActionResult Apagar(int id)
         {
             try
             {
-                bool apagado = _fabricantesRepositorio.Apagar(Id);
+                bool apagado = _fabricantesRepositorio.Apagar(id);
                 if (apagado)
                 {
                     TempData["MensagemSucesso"] = "Fabricante deletado com sucesso";
@@ -144,28 +111,59 @@ namespace Intelectah.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Criar(FabricantesViewModel viewModel)
+        public async Task<IActionResult> ApagarConfirmacao(int Id)
         {
-            if (ModelState.IsValid)
+            var fabricante = _fabricantesRepositorio.ListarPorId(Id);
+            
+            if (fabricante == null)
             {
-                var fabricantesModel = new FabricantesModel
-                {
-                    FabricanteID = viewModel.FabricanteID,
-                    NomeFabricante = viewModel.NomeFabricante,
-                    PaisOrigem = viewModel.PaisOrigem,
-                    AnoFundacao = viewModel.AnoFundacao,
-                    URL = viewModel.URL
-                };
-
-                await _fabricantesRepositorio.AdicionarAsync(fabricantesModel);
+                TempData["MensagemErro"] = "Fabricante não encontrado.";
                 return RedirectToAction("Index");
             }
 
-            viewModel.OpcaoPaises = await GetListaPaisesAsync();
-
+            var viewModel = new FabricantesViewModel
+            {
+                FabricanteID = fabricante.FabricanteID,
+                NomeFabricante = fabricante.NomeFabricante,
+                PaisOrigem = fabricante.PaisOrigem,
+                AnoFundacao = fabricante.AnoFundacao,
+                URL = fabricante.URL,
+            };
             return View(viewModel);
+        }
 
+        [HttpPost]
+        public IActionResult Criar(FabricantesViewModel viewModel)
+        {
+            if (!_fabricantesRepositorio.VerificarNomeFabricanteUnico(viewModel.NomeFabricante))
+            {
+                ModelState.AddModelError(nameof(viewModel.NomeFabricante), "O nome do fabricante já existe.");
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var fabricantesModel = new FabricantesModel
+                    {
+                        FabricanteID = viewModel.FabricanteID,
+                        NomeFabricante = viewModel.NomeFabricante,
+                        PaisOrigem = viewModel.PaisOrigem,
+                        AnoFundacao = viewModel.AnoFundacao,
+                        URL = viewModel.URL
+                    };
+
+                    _fabricantesRepositorio.Adicionar(fabricantesModel);
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, $"Ocorreu um erro ao salvar o fabricante: {ex.Message}");
+                }
+            }
+
+            viewModel.OpcaoPaises = GetListaPaises();
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -195,9 +193,8 @@ namespace Intelectah.Controllers
                 }
             }
 
-            viewModel.OpcaoPaises = await GetListaPaisesAsync();
+            viewModel.OpcaoPaises = GetListaPaises();
             return View(viewModel);
         }
-
     }
 }

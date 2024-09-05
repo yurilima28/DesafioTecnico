@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static ValidationModel;
 
 namespace Intelectah.Models
 {
     public class ClientesModel
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ClienteID { get; set; }
 
         [Required]
@@ -14,8 +14,7 @@ namespace Intelectah.Models
         public string Nome { get; set; }
 
         [Required]
-        [StringLength(11)]
-        [RegularExpression(@"^\d{11}$", ErrorMessage = "O CPF deve conter 11 dígitos numéricos.")]
+        [CPFValidation(ErrorMessage = "O CPF informado é inválido.")]
         public string CPF { get; set; }
 
         [Required]
@@ -24,7 +23,7 @@ namespace Intelectah.Models
         public string Email { get; set; }
 
         [Required]
-        [StringLength(15)]
+        [MaxLength(16)]
         [Phone(ErrorMessage = "Número de telefone inválido.")]
         public string Telefone { get; set; }
 
