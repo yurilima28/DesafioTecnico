@@ -12,7 +12,5 @@ namespace Intelectah.Repositorio
         ClientesModel ObterPorNome(string nomeCliente);
         bool VerificarNomeClienteUnico(string nomeCliente, int? clienteID = null);
         bool VerificarCpfUnico(string cpf, int? clienteID = null);
-     
-
     }
 }

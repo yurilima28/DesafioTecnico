@@ -7,14 +7,17 @@ namespace Intelectah.Repositorio
     public class FabricantesRepositorio : IFabricantesRepositorio
     {
         private readonly BancoContext _bancoContext;
+
         public FabricantesRepositorio(BancoContext bancoContext)
         {
             _bancoContext = bancoContext;
         }
+
         public FabricantesModel ListarPorId(int id)
         {
             return _bancoContext.Fabricantes.FirstOrDefault(x => x.FabricanteID == id);
         }
+
         public List<FabricantesModel> BuscarTodos()
         {
             return _bancoContext.Fabricantes.ToList();

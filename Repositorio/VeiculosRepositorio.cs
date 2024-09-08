@@ -1,6 +1,5 @@
 ﻿using Intelectah.Dapper;
 using Intelectah.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Intelectah.Repositorio
 {
@@ -12,14 +11,17 @@ namespace Intelectah.Repositorio
         {
             _bancoContext = bancoContext;
         }
+
         public VeiculosModel ListarPorId(int Id)
         {
             return _bancoContext.Veiculos.FirstOrDefault(x => x.VeiculoID == Id);
         }
+
         public List<VeiculosModel> BuscarTodos()
         {
              return _bancoContext.Veiculos.ToList();
         }
+
         public VeiculosModel Adicionar(VeiculosModel veiculo)
         {
             var fabricante = _bancoContext.Fabricantes.Find(veiculo.FabricanteID);
@@ -71,6 +73,13 @@ namespace Intelectah.Repositorio
         public bool VerificarSeVeiculoVendido(int veiculoId)
         {
             return _bancoContext.Vendas.Any(v => v.VeiculoID == veiculoId);
+        }
+
+        public List<VeiculosModel> ObterModelosPorFabricante(int fabricanteId)
+        {
+            return _bancoContext.Veiculos
+                .Where(v => v.FabricanteID == fabricanteId)
+                .ToList();
         }
     }
 }

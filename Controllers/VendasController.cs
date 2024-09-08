@@ -1,4 +1,5 @@
-﻿using Intelectah.Models;
+﻿using Intelectah.Dapper;
+using Intelectah.Models;
 using Intelectah.Repositorio;
 using Intelectah.ViewModel;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +15,16 @@ namespace Intelectah.Controllers
         private readonly IVeiculosRepositorio _veiculosRepositorio;
         private readonly IFabricantesRepositorio _fabricantesRepositorio;
         private readonly IUsuariosRepositorio _usuariosRepositorio;
+        private readonly BancoContext _bancoContext;
 
-        public VendasController(IVendasRepositorio vendasRepositorio, IClientesRepositorio clientesRepositorio, IConcessionariasRepositorio concessionariasRepositorio, IVeiculosRepositorio veiculosRepositorio, IFabricantesRepositorio fabricantesRepositorio, IUsuariosRepositorio usuariosRepositorio)
+        public VendasController(
+            IVendasRepositorio vendasRepositorio,
+            IClientesRepositorio clientesRepositorio,
+            IConcessionariasRepositorio concessionariasRepositorio,
+            IVeiculosRepositorio veiculosRepositorio,
+            IFabricantesRepositorio fabricantesRepositorio,
+            IUsuariosRepositorio usuariosRepositorio,
+            BancoContext bancoContext)
         {
             _vendasRepositorio = vendasRepositorio;
             _clientesRepositorio = clientesRepositorio;
@@ -23,70 +32,42 @@ namespace Intelectah.Controllers
             _veiculosRepositorio = veiculosRepositorio;
             _fabricantesRepositorio = fabricantesRepositorio;
             _usuariosRepositorio = usuariosRepositorio;
+            _bancoContext = bancoContext;
         }
 
         public IActionResult Index()
         {
-            List<VendasModel> vendas = _vendasRepositorio.BuscarTodos();
-
+            var vendas = _vendasRepositorio.BuscarTodos();
             var vendasViewModel = vendas.Select(v => new VendasViewModel
             {
                 VendaId = v.VendaId,
                 ClienteID = v.ClienteID,
+                Cliente = v.Cliente, 
                 DataVenda = v.DataVenda,
                 ValorTotal = v.ValorTotal,
                 UsuarioID = v.UsuarioID,
+                Usuario = v.Usuario, 
+                ConcessionariaID = v.ConcessionariaID,
+                Concessionaria = v.Concessionaria,
                 FabricanteID = v.FabricanteID,
-                VeiculoID = v.VeiculoID
+                Fabricante = v.Fabricante, 
+                VeiculoID = v.VeiculoID,
+                Veiculo = v.Veiculo, 
             }).ToList();
 
             return View(vendasViewModel);
         }
- 
+
         public IActionResult Criar()
         {
             var viewModel = new VendasViewModel
             {
                 ProtocoloVenda = GerarProtocoloVenda()
             };
-            var clientes = _clientesRepositorio.BuscarTodos();
-
-            ViewBag.Clientes = clientes.Select(c => new SelectListItem
-            {
-                Value = c.ClienteID.ToString(),
-                Text = c.Nome
-            }).ToList();
-
-            var usuarios = _usuariosRepositorio.ObterTodosUsuarios();
-            ViewBag.Usuarios = usuarios.Select(u => new SelectListItem
-            {
-                Value = u.UsuarioID.ToString(),
-                Text = u.NomeUsuario
-            }).ToList();
-
-            var concessionarias = _concessionariasRepositorio.BuscarTodos();
-            ViewBag.Concessionarias = concessionarias.Select(co => new SelectListItem
-            {
-                Value = co.ConcessionariaID.ToString(),
-                Text = co.Nome
-            }).ToList();
-
-            var fabricantes = _fabricantesRepositorio.BuscarTodos();
-            ViewBag.Fabricantes = fabricantes.Select(f => new SelectListItem
-            {
-                Value = f.FabricanteID.ToString(),
-                Text = f.NomeFabricante
-            }).ToList();
-
-            var veiculos = _veiculosRepositorio.BuscarTodos();
-            ViewBag.Modelos = veiculos.Select(v => new SelectListItem
-            {
-                Value = v.VeiculoID.ToString(),
-                Text = v.ModeloVeiculo
-            }).ToList();
-
+            PrepararDadosDropdowns();
             return View(viewModel);
         }
+
         public IActionResult Editar(int id)
         {
             var venda = _vendasRepositorio.ListarPorId(id);
@@ -102,32 +83,32 @@ namespace Intelectah.Controllers
         }
 
         [HttpPost]
-        public IActionResult Criar(VendasViewModel vendaViewModel)
+        public IActionResult Criar(VendasViewModel vendasViewModel)
         {
             if (ModelState.IsValid)
             {
                 var novaVenda = new VendasModel
                 {
-                    ClienteID = vendaViewModel.ClienteID,
-                    DataVenda = vendaViewModel.DataVenda,
-                    ValorTotal = vendaViewModel.ValorTotal,
-                    UsuarioID = vendaViewModel.UsuarioID,
-                    ConcessionariaID = vendaViewModel.ConcessionariaID,
-                    FabricanteID = vendaViewModel.FabricanteID,
-                    VeiculoID = vendaViewModel.VeiculoID,
+                    ClienteID = vendasViewModel.ClienteID,
+                    DataVenda = vendasViewModel.DataVenda,
+                    ValorTotal = vendasViewModel.ValorTotal,
+                    UsuarioID = vendasViewModel.UsuarioID,
+                    ConcessionariaID = vendasViewModel.ConcessionariaID,
+                    FabricanteID = vendasViewModel.FabricanteID,
+                    VeiculoID = vendasViewModel.VeiculoID,
                     ProtocoloVenda = GerarProtocoloVenda()
                 };
 
                 _vendasRepositorio.Adicionar(novaVenda);
+
                 TempData["MensagemSucesso"] = "Venda criada com sucesso!";
                 return RedirectToAction("Index");
             }
 
             PrepararDadosDropdowns();
-            return View(vendaViewModel);
+            return View(vendasViewModel);
         }
 
-  
         [HttpPost]
         public IActionResult Editar(VendasViewModel vendaViewModel)
         {
@@ -140,14 +121,7 @@ namespace Intelectah.Controllers
                     return RedirectToAction("Index");
                 }
 
-                venda.ClienteID = vendaViewModel.ClienteID;
-                venda.DataVenda = vendaViewModel.DataVenda;
-                venda.ValorTotal = vendaViewModel.ValorTotal;
-                venda.UsuarioID = vendaViewModel.UsuarioID;
-                venda.ConcessionariaID = vendaViewModel.ConcessionariaID;
-                venda.FabricanteID = vendaViewModel.FabricanteID;
-                venda.VeiculoID = vendaViewModel.VeiculoID;
-
+                AtualizarVenda(venda, vendaViewModel);
                 _vendasRepositorio.Atualizar(venda);
                 TempData["MensagemSucesso"] = "Venda atualizada com sucesso!";
                 return RedirectToAction("Index");
@@ -168,21 +142,23 @@ namespace Intelectah.Controllers
             }
 
             bool apagou = _vendasRepositorio.Apagar(id);
-            if (apagou)
-            {
-                TempData["MensagemSucesso"] = "Venda excluída com sucesso.";
-            }
-            else
-            {
-                TempData["MensagemErro"] = "Erro ao excluir a venda.";
-            }
+            TempData["MensagemSucesso"] = apagou ? "Venda excluída com sucesso." : "Erro ao excluir a venda.";
             return RedirectToAction("Index");
+        }
+
+        public JsonResult ObterModelosPorFabricante(int fabricanteId)
+        {
+            var modelos = _bancoContext.Veiculos
+                .Where(m => m.FabricanteID == fabricanteId)
+                .Select(m => new { id = m.VeiculoID, nome = m.ModeloVeiculo })
+                .ToList();
+
+            return Json(modelos);
         }
 
         private string GerarProtocoloVenda()
         {
-            var dataAtual = DateTime.Now;
-            return dataAtual.ToString("yyyyMMdd-HHmmss");
+            return DateTime.Now.ToString("yyyyMMdd-HHmmss");
         }
 
         private VendasViewModel MapearParaViewModel(VendasModel venda)
@@ -194,43 +170,44 @@ namespace Intelectah.Controllers
                 DataVenda = venda.DataVenda,
                 ValorTotal = venda.ValorTotal,
                 UsuarioID = venda.UsuarioID,
+                ConcessionariaID = venda.ConcessionariaID,
                 FabricanteID = venda.FabricanteID,
                 VeiculoID = venda.VeiculoID,
+                ProtocoloVenda = venda.ProtocoloVenda,
             };
+        }
+
+        private void AtualizarVenda(VendasModel venda, VendasViewModel vendaViewModel)
+        {
+            venda.ClienteID = vendaViewModel.ClienteID;
+            venda.DataVenda = vendaViewModel.DataVenda;
+            venda.ValorTotal = vendaViewModel.ValorTotal;
+            venda.UsuarioID = vendaViewModel.UsuarioID;
+            venda.ConcessionariaID = vendaViewModel.ConcessionariaID;
+            venda.FabricanteID = vendaViewModel.FabricanteID;
+            venda.VeiculoID = vendaViewModel.VeiculoID;
         }
 
         private void PrepararDadosDropdowns()
         {
-            ViewBag.Clientes = _clientesRepositorio.BuscarTodos().Select(c => new SelectListItem
-            {
-                Value = c.ClienteID.ToString(),
-                Text = c.Nome
-            }).ToList();
-
-            ViewBag.Concessionarias = _concessionariasRepositorio.BuscarTodos().Select(co => new SelectListItem
-            {
-                Value = co.ConcessionariaID.ToString(),
-                Text = co.Nome
-            }).ToList(); 
-
-            ViewBag.Veiculos = _veiculosRepositorio.BuscarTodos().Select(v => new SelectListItem
+            ViewBag.Clientes = ObterSelectList(_clientesRepositorio.BuscarTodos(), c => c.ClienteID.ToString(), c => c.Nome);
+            ViewBag.Concessionarias = ObterSelectList(_concessionariasRepositorio.BuscarTodos(), co => co.ConcessionariaID.ToString(), co => co.Nome);
+            ViewBag.Fabricantes = ObterSelectList(_fabricantesRepositorio.BuscarTodos(), f => f.FabricanteID.ToString(), f => f.NomeFabricante);
+            ViewBag.Usuarios = ObterSelectList(_usuariosRepositorio.ObterTodosUsuarios(), u => u.UsuarioID.ToString(), u => u.NomeUsuario);
+            ViewBag.Modelos = _veiculosRepositorio.BuscarTodos().Select(v => new SelectListItem
             {
                 Value = v.VeiculoID.ToString(),
                 Text = v.ModeloVeiculo
             }).ToList();
-
-            ViewBag.Fabricantes = _fabricantesRepositorio.BuscarTodos().Select(f => new SelectListItem
-            {
-                Value = f.FabricanteID.ToString(),
-                Text = f.NomeFabricante
-            }).ToList();
-
-            ViewBag.Usuarios = _usuariosRepositorio.ObterTodosUsuarios().Select(u => new SelectListItem
-            {
-                Value = u.UsuarioID.ToString(),
-                Text = u.NomeUsuario
-            }).ToList();
         }
 
+        private IEnumerable<SelectListItem> ObterSelectList<T>(IEnumerable<T> items, Func<T, string> valueSelector, Func<T, string> textSelector)
+        {
+            return items.Select(item => new SelectListItem
+            {
+                Value = valueSelector(item),
+                Text = textSelector(item)
+            }).ToList();
+        }
     }
 }

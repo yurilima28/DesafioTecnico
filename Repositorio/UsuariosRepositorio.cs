@@ -11,20 +11,24 @@ namespace Intelectah.Repositorio
         {
             _bancoContext = bancoContext;
         }
+
         public UsuariosModel BuscarPorLogin(string login)
         {
             return _bancoContext.Usuarios.FirstOrDefault(u => u.Login == login);
         }
+
         public UsuariosModel ListarPorId(int id)
         {
             return _bancoContext.Usuarios.Find(id);
         }
+
         public UsuariosModel AdicionarUsuario(UsuariosModel usuario)
         {
             _bancoContext.Usuarios.Add(usuario);
             _bancoContext.SaveChanges();
             return usuario;
         }
+
         public UsuariosModel AtualizarUsuario(UsuariosModel usuario)
         {
             var existingUsuario = _bancoContext.Usuarios.Find(usuario.UsuarioID);
@@ -51,10 +55,12 @@ namespace Intelectah.Repositorio
         {
             return _bancoContext.Usuarios.Find(usuarioId);
         }
+
         public List<UsuariosModel> ObterTodosUsuarios()
         {
             return _bancoContext.Usuarios.ToList();
         }
+
         public bool UsuarioExiste(string nomeUsuario)
         {
             return _bancoContext.Usuarios.Any(u => u.NomeUsuario == nomeUsuario);

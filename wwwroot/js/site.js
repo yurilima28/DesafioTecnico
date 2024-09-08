@@ -12,7 +12,7 @@ $(document).ready(function () {
 });
 
 function initializeDatatables() {
-    const tables = ['#tabela-fabricantes', '#tabela-concessionarias', '#tabela-usuarios', '#tabela-veiculos', '#tabela-clientes'];
+    const tables = ['#tabela-fabricantes', '#tabela-concessionarias', '#tabela-usuarios', '#tabela-veiculos', '#tabela-clientes', '#tabela-vendas'];
 
     tables.forEach(function (id) {
         $(id).DataTable({

@@ -16,12 +16,24 @@ namespace Intelectah.Repositorio
 
         public VendasModel ListarPorId(int id)
         {
-            return _bancoContext.Vendas.FirstOrDefault(v => v.VendaId == id);
+            return _bancoContext.Vendas
+                            .Include(v => v.Cliente)
+                            .Include(v => v.Usuario)
+                            .Include(v => v.Concessionaria)
+                            .Include(v => v.Fabricante)
+                            .Include(v => v.Veiculo)
+                            .FirstOrDefault(v => v.VendaId == id);
         }
 
         public List<VendasModel> BuscarTodos()
         {
-            return _bancoContext.Vendas.ToList();
+            return _bancoContext.Vendas
+                          .Include(v => v.Cliente) // Carregar Cliente
+                          .Include(v => v.Usuario) // Carregar Usuario
+                          .Include(v => v.Concessionaria) // Carregar Concessionaria
+                          .Include(v => v.Fabricante) // Carregar Fabricante
+                          .Include(v => v.Veiculo) // Carregar Veiculo
+                          .ToList();
         }
 
         public VendasModel Adicionar(VendasModel venda)

@@ -7,6 +7,7 @@ namespace Intelectah.Repositorio
     public class ConcessionariasRepositorio : IConcessionariasRepositorio
     {
         private readonly BancoContext _bancoContext;
+
         public ConcessionariasRepositorio(BancoContext bancoContext)
         {
             _bancoContext = bancoContext;
@@ -65,5 +66,6 @@ namespace Intelectah.Repositorio
             var nomeMinusc = nomeConcessionaria.ToLower();
             return !_bancoContext.Concessionarias.Any(c => c.Nome.ToLower() == nomeMinusc);
         }
+     
     }
 }

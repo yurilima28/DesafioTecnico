@@ -11,5 +11,6 @@ namespace Intelectah.Repositorio
         bool Apagar (int Id);
         List<VeiculosModel> BuscarPorFabricante(int fabricanteId);
         bool VerificarSeVeiculoVendido(int veiculoId);
+        List<VeiculosModel> ObterModelosPorFabricante(int fabricanteId);
     }
 }

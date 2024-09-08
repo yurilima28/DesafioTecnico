@@ -13,7 +13,13 @@ namespace Intelectah.ViewModel
         public int FabricanteID { get; set; }
         public int VeiculoID { get; set; }
         public string ProtocoloVenda { get; set; }
-        
+
+        public ClientesModel Cliente { get; set; }
+        public UsuariosModel Usuario { get; set; }
+        public ConcessionariasModel Concessionaria { get; set; }
+        public FabricantesModel Fabricante { get; set; }
+        public VeiculosModel Veiculo { get; set; }
+
         public VendasViewModel()
         {
         }
@@ -25,7 +31,7 @@ namespace Intelectah.ViewModel
             ValorTotal = valorTotal;
             UsuarioID = usuarioId;
             FabricanteID = fabricanteId;
-            ProtocoloVenda = protocoloVenda;    
+            ProtocoloVenda = protocoloVenda;
         }
     }
 }

@@ -11,6 +11,5 @@ namespace Intelectah.Repositorio
         bool Apagar(int id);
         ConcessionariasModel ObterPorNome(string nomeConcessionaria);
         bool VerificarNomeConcessionariaUnico(string nomeConcessionaria);
-
     }
 }

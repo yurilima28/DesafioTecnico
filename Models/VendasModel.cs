@@ -36,6 +36,7 @@ namespace Intelectah.Models
         public virtual ConcessionariasModel Concessionaria { get; set; }
         public virtual VeiculosModel Veiculo { get; set; }
         public virtual FabricantesModel Fabricante { get; set; }
+
         public VendasModel()
         {
             ProtocoloVenda = GerarProtocoloVenda();

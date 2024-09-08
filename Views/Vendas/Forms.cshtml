@@ -1,7 +1,5 @@
 ﻿@model Intelectah.ViewModel.VendasViewModel
 
-
-
 <div class="form-row">
     <div class="col-md-6">
         <label asp-for="ClienteID" class="form-label">Selecione o cliente</label>
@@ -41,7 +39,7 @@
 
     <div class="col-md-6">
         <label asp-for="FabricanteID" class="form-label">Fabricante</label>
-        <select asp-for="FabricanteID" asp-items="ViewBag.Fabricantes" class="form-select">
+        <select asp-for="FabricanteID" asp-items="ViewBag.Fabricantes" class="form-select" id="FabricanteID">
             <option value="">Selecione um fabricante</option>
         </select>
         <span asp-validation-for="FabricanteID" class="text-danger"></span>
@@ -49,15 +47,20 @@
 
     <div class="col-md-6">
         <label asp-for="VeiculoID" class="form-label">Modelo</label>
-        <select asp-for="VeiculoID" asp-items="ViewBag.Modelos" class="form-select">
+        <select asp-for="VeiculoID" asp-items="ViewBag.Modelos" class="form-select" id="VeiculoID">
             <option value="">Selecione um modelo</option>
         </select>
         <span asp-validation-for="VeiculoID" class="text-danger"></span>
     </div>
+
     <div class="col-md-6">
         <label asp-for="ProtocoloVenda" class="form-label">Protocolo da Venda</label>
         <input asp-for="ProtocoloVenda" class="form-control" readonly />
         <span asp-validation-for="ProtocoloVenda" class="text-danger"></span>
     </div>
-
 </div>
+
+@section Scripts {
+    <script src="~/js/vendas.js"></script>
+}
+
