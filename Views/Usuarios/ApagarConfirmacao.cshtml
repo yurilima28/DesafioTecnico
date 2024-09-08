@@ -5,7 +5,7 @@
 }
 
 <form method="post" asp-controller="Usuarios" asp-action="Apagar">
-    <input type="hidden" name="UsuarioID" value="@Model.UsuarioId" />
+    <input type="hidden" name="id" value="@Model.UsuarioId" />
     <div class="text-center">
         <h3>Realmente deseja apagar o usuário @Model.NomeUsuario?</h3>
     </div>

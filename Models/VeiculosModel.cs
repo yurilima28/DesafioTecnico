@@ -24,7 +24,7 @@ namespace Intelectah.Models
         [Required]
         public int FabricanteID { get; set; }
         public int? VendaID { get; set; }
-        public FabricantesModel Fabricantes { get; set; }
+        public FabricantesModel Fabricante { get; set; }
         public VendasModel Vendas { get; set; }
         public bool FoiVendido => VendaID.HasValue;
 

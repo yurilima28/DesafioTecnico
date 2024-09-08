@@ -7,4 +7,9 @@
 
 <h2>@ViewData["Title"]</h2>
 
-@await Html.PartialAsync("Forms", Model)
+<form asp-controller="Vendas" asp-action="Criar" method="post">
+    @Html.Partial("Forms.cshtml")
+
+    <button type="submit" class="btn btn-primary" style="margin-top:10px">Confirmar venda</button>
+    <a class="btn btn-secondary" asp-controller="Vendas" asp-action="Index" role="button" style="margin-top:10px">Voltar</a>
+</form>

@@ -47,7 +47,7 @@ namespace Intelectah.Dapper
 
             modelBuilder.Entity<FabricantesModel>()
                 .HasMany(f => f.Veiculos)
-                .WithOne(v => v.Fabricantes)
+                .WithOne(v => v.Fabricante)
                 .HasForeignKey(v => v.FabricanteID)
                 .OnDelete(DeleteBehavior.Restrict);
 

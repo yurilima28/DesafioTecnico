@@ -14,22 +14,14 @@ namespace Intelectah.Repositorio
             _bancoContext = bancoContext;
         }
 
-        public VendasModel ListarPorId(int vendaId)
+        public VendasModel ListarPorId(int id)
         {
-            return _bancoContext.Vendas
-                .Include(v => v.Cliente)
-                .Include(v => v.Usuario)
-                .Include(v => v.Concessionaria)
-                .FirstOrDefault(x => x.VendaId == vendaId);
+            return _bancoContext.Vendas.FirstOrDefault(v => v.VendaId == id);
         }
 
-        public List<VendasModel> BuscarTodas()
+        public List<VendasModel> BuscarTodos()
         {
-            return _bancoContext.Vendas
-                .Include(v => v.Cliente)
-                .Include(v => v.Usuario)
-                .Include(v => v.Concessionaria)
-                .ToList();
+            return _bancoContext.Vendas.ToList();
         }
 
         public VendasModel Adicionar(VendasModel venda)
@@ -39,45 +31,33 @@ namespace Intelectah.Repositorio
             return venda;
         }
 
-        public async Task AdicionarAsync(VendasModel venda)
-        {
-            await _bancoContext.Vendas.AddAsync(venda);
-            await _bancoContext.SaveChangesAsync();
-        }
-
         public VendasModel Atualizar(VendasModel venda)
         {
-            VendasModel vendaDB = ListarPorId(venda.VendaId);
-
-            if (vendaDB == null) throw new Exception("Houve um erro ao atualizar a venda.");
-
-            vendaDB.ClienteID = venda.ClienteID;
-            vendaDB.DataVenda = venda.DataVenda;
-            vendaDB.ValorTotal = venda.ValorTotal;
-            vendaDB.UsuarioID = venda.UsuarioID;
-            vendaDB.ConcessionariaID = venda.ConcessionariaID;
-
-            _bancoContext.Vendas.Update(vendaDB);
+            _bancoContext.Vendas.Update(venda);
             _bancoContext.SaveChanges();
-            return vendaDB;
+            return venda;
         }
 
-        public bool Apagar(int vendaId)
+        public bool Apagar(int id)
         {
-            VendasModel vendaDB = ListarPorId(vendaId);
-
-            if (vendaDB == null) throw new Exception("Houve um erro ao apagar a venda.");
-
-            _bancoContext.Vendas.Remove(vendaDB);
-            _bancoContext.SaveChanges();
-            return true;
+            var venda = ListarPorId(id);
+            if (venda != null)
+            {
+                _bancoContext.Vendas.Remove(venda);
+                _bancoContext.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
-        public VendasModel ObterPorCliente(int clienteId)
+        public VendasModel ObterPorProtocolo(string protocoloVenda)
         {
-            return _bancoContext.Vendas
-                .Include(v => v.Cliente)
-                .FirstOrDefault(v => v.ClienteID == clienteId);
+            return _bancoContext.Vendas.FirstOrDefault(v => v.ProtocoloVenda == protocoloVenda);
+        }
+
+        public bool VerificarProtocoloUnico(string protocoloVenda)
+        {
+            return !_bancoContext.Vendas.Any(v => v.ProtocoloVenda == protocoloVenda);
         }
     }
 }

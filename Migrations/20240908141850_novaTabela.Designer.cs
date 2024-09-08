@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Intelectah.Migrations
 {
     [DbContext(typeof(BancoContext))]
-    [Migration("20240905212645_testandoTabelas")]
-    partial class testandoTabelas
+    [Migration("20240908141850_novaTabela")]
+    partial class novaTabela
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -153,9 +153,6 @@ namespace Intelectah.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UsuarioID"), 1L, 1);
 
-                    b.Property<int?>("ConcessionariasModelConcessionariaID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -179,8 +176,6 @@ namespace Intelectah.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.HasKey("UsuarioID");
-
-                    b.HasIndex("ConcessionariasModelConcessionariaID");
 
                     b.ToTable("Usuarios");
                 });
@@ -250,8 +245,10 @@ namespace Intelectah.Migrations
                     b.Property<int>("FabricanteID")
                         .HasColumnType("int");
 
-                    b.Property<int>("FabricantesFabricanteID")
-                        .HasColumnType("int");
+                    b.Property<string>("ProtocoloVenda")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("UsuarioID")
                         .HasColumnType("int");
@@ -268,7 +265,7 @@ namespace Intelectah.Migrations
 
                     b.HasIndex("ConcessionariaID");
 
-                    b.HasIndex("FabricantesFabricanteID");
+                    b.HasIndex("FabricanteID");
 
                     b.HasIndex("UsuarioID");
 
@@ -285,26 +282,19 @@ namespace Intelectah.Migrations
                         .HasForeignKey("ConcessionariasModelConcessionariaID");
                 });
 
-            modelBuilder.Entity("Intelectah.Models.UsuariosModel", b =>
-                {
-                    b.HasOne("Intelectah.Models.ConcessionariasModel", null)
-                        .WithMany("Usuarios")
-                        .HasForeignKey("ConcessionariasModelConcessionariaID");
-                });
-
             modelBuilder.Entity("Intelectah.Models.VeiculosModel", b =>
                 {
                     b.HasOne("Intelectah.Models.ConcessionariasModel", null)
                         .WithMany("Veiculos")
                         .HasForeignKey("ConcessionariasModelConcessionariaID");
 
-                    b.HasOne("Intelectah.Models.FabricantesModel", "Fabricantes")
+                    b.HasOne("Intelectah.Models.FabricantesModel", "Fabricante")
                         .WithMany("Veiculos")
                         .HasForeignKey("FabricanteID")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Fabricantes");
+                    b.Navigation("Fabricante");
                 });
 
             modelBuilder.Entity("Intelectah.Models.VendasModel", b =>
@@ -321,9 +311,9 @@ namespace Intelectah.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Intelectah.Models.FabricantesModel", "Fabricantes")
+                    b.HasOne("Intelectah.Models.FabricantesModel", "Fabricante")
                         .WithMany()
-                        .HasForeignKey("FabricantesFabricanteID")
+                        .HasForeignKey("FabricanteID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -343,7 +333,7 @@ namespace Intelectah.Migrations
 
                     b.Navigation("Concessionaria");
 
-                    b.Navigation("Fabricantes");
+                    b.Navigation("Fabricante");
 
                     b.Navigation("Usuario");
 
@@ -358,8 +348,6 @@ namespace Intelectah.Migrations
             modelBuilder.Entity("Intelectah.Models.ConcessionariasModel", b =>
                 {
                     b.Navigation("Fabricantes");
-
-                    b.Navigation("Usuarios");
 
                     b.Navigation("Veiculos");
 

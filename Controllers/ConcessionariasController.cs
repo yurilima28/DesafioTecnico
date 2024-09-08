@@ -154,13 +154,7 @@ namespace Intelectah.Controllers
 
             if (ModelState.IsValid)
             {
-                bool nomeExiste = _concessionariasRepositorio.VerificarNomeConcessionariaUnico(viewModel.Nome);
-                if (nomeExiste)
-                {
-                    ModelState.AddModelError(nameof(viewModel.Nome), "O nome da concessionária já está em uso.");
-                    return View(viewModel);
-                }
-
+             
                 var concessionaria = new ConcessionariasModel
                 {
                     ConcessionariaID = viewModel.ConcessionariaID,

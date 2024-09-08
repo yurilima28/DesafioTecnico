@@ -5,12 +5,12 @@ namespace Intelectah.Repositorio
 {
     public interface IVendasRepositorio
     {
-        VendasModel ListarPorId(int vendaId);
-        List<VendasModel> BuscarTodas();
+        VendasModel ListarPorId(int id);
+        List<VendasModel> BuscarTodos();
         VendasModel Adicionar(VendasModel venda);
-        Task AdicionarAsync(VendasModel venda);
         VendasModel Atualizar(VendasModel venda);
-        bool Apagar(int vendaId);
-        VendasModel ObterPorCliente(int clienteId);
+        bool Apagar(int id);
+        VendasModel ObterPorProtocolo(string protocoloVenda);
+        bool VerificarProtocoloUnico(string protocoloVenda);
     }
 }

@@ -22,6 +22,10 @@ namespace Intelectah.Models
         [DataType(DataType.Currency)]
         public decimal ValorTotal { get; set; }
 
+        [Required]
+        [MaxLength(20)]
+        public string ProtocoloVenda { get; set; }
+
         public int UsuarioID { get; set; }
         public int ConcessionariaID { get; set; }
         public int FabricanteID { get; set; }
@@ -31,10 +35,14 @@ namespace Intelectah.Models
         public virtual ClientesModel Cliente { get; set; }
         public virtual ConcessionariasModel Concessionaria { get; set; }
         public virtual VeiculosModel Veiculo { get; set; }
-        public virtual FabricantesModel Fabricantes { get; set; }
-        public VendasModel() { }
+        public virtual FabricantesModel Fabricante { get; set; }
+        public VendasModel()
+        {
+            ProtocoloVenda = GerarProtocoloVenda();
 
-        public VendasModel(int clienteID, decimal valorTotal, DateTime dataVenda, int usuarioID, int concessionarID, int fabricanteID, int veiculoID)
+        }
+
+        public VendasModel(int clienteID, decimal valorTotal, DateTime dataVenda, int usuarioID, int concessionarID, int fabricanteID, int veiculoID, string protocoloVenda)
         {
             ClienteID = clienteID;
             ValorTotal = valorTotal;
@@ -43,6 +51,11 @@ namespace Intelectah.Models
             ConcessionariaID = concessionarID;
             FabricanteID = fabricanteID;
             VeiculoID = veiculoID;
+            ProtocoloVenda = GerarProtocoloVenda();
+        }
+        public string GerarProtocoloVenda()
+        {
+            return DateTime.Now.ToString("yyyyMMddHHmmss");
         }
     }
 }
